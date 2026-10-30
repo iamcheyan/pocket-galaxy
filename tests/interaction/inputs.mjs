@@ -59,6 +59,37 @@ try {
     const zoomedOut = await screenOf(page);
     check('keyboard: "-" zooms out', zoomedOut.zoom < zoomedIn.zoom);
 
+    // X = scan, Y = details on the selected body.
+    const scanTarget = await page.evaluate(() => {
+      const store = window.__pocketGalaxy.store;
+      const body = store.visibleBodies().find((candidate) => !candidate.scanned);
+      store.selectBody(body.id);
+      return { id: body.id, stat: store.state.game.stats.bodiesScanned };
+    });
+    await page.keyboard.press('z');
+    await sleep(240);
+    const scanned = await page.evaluate(
+      (id) => ({
+        scanned: window.__pocketGalaxy.store.state.game.galaxy.bodies[id].scanned,
+        stat: window.__pocketGalaxy.store.state.game.stats.bodiesScanned,
+      }),
+      scanTarget.id,
+    );
+    check('keyboard: Z scans the selected body', scanned.scanned === true && scanned.stat > scanTarget.stat, JSON.stringify(scanned));
+
+    await page.keyboard.press('x');
+    await sleep(240);
+    const detailText = await page.evaluate(
+      () => document.querySelector('[role="dialog"]')?.textContent ?? '',
+    );
+    check('keyboard: X opens the details modal for the selection', detailText.includes('Deposit'), detailText.slice(0, 60));
+    await page.keyboard.press('Escape');
+    await sleep(200);
+    check(
+      'keyboard: Escape closes the details modal',
+      await page.evaluate(() => !document.querySelector('[role="dialog"]')),
+    );
+
     // Tab-order equivalent: ArrowDown moves the focus ring inside a screen.
     await page.evaluate(() => window.__pocketGalaxy.navigate('ship'));
     await sleep(250);

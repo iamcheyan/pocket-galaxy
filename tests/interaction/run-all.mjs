@@ -25,7 +25,7 @@ async function freePort() {
 const PORT = Number(process.env.PORT ?? (await freePort()));
 const BASE = `http://127.0.0.1:${PORT}`;
 
-const SUITES = ['responsive.mjs', 'inputs.mjs', 'gameplay.mjs', 'performance.mjs'];
+const SUITES = ['responsive.mjs', 'themes.mjs', 'inputs.mjs', 'gameplay.mjs', 'performance.mjs'];
 
 async function waitForServer(url, timeoutMs = 15000) {
   const deadline = Date.now() + timeoutMs;

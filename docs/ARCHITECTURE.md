@@ -74,6 +74,9 @@ screen burns frames. Per frame:
 
 Theme colours are read from CSS custom properties via `getComputedStyle`, so
 light/dark/OLED/e-ink need no canvas code changes and no duplicated colour table.
+The loop caches the palette but re-reads it as soon as `data-theme` changes (or
+every 1.2 s otherwise), so a theme switch repaints on the next frame instead of
+leaving the last palette on screen.
 
 ## Determinism
 

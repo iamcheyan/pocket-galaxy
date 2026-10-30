@@ -63,9 +63,9 @@ swapped `navigator.getGamepads`.
 
 | Requirement | Status | Evidence |
 |---|---|---|
-| Dark | ✅ | `docs/evidence/theme-dark-desktop-galaxy.png` |
-| Light | ✅ | `docs/evidence/theme-light-desktop-galaxy.png` |
-| OLED (pure `#000`) | ✅ | `docs/evidence/theme-oled-desktop-galaxy.png` |
+| Dark | ✅ | `themes.mjs` (canvas pixel probe) + `docs/evidence/theme-dark-desktop-galaxy.png` |
+| Light | ✅ | `themes.mjs`: canvas corner is light and differs from dark |
+| OLED (pure `#000`) | ✅ | `themes.mjs`: canvas corner pixel is exactly `0,0,0`; `--bg`/`--bg-deep`/`--surface`/`--surface-2` are `#000000` |
 | Handheld layout | ✅ desktop-simulated | `layout-handheld-390x844-galaxy.png`, `page-galaxy-handheld.png` |
 | Tablet layout | ✅ desktop-simulated | `layout-tablet-820x1180-galaxy.png` |
 | Desktop layout | ✅ | `theme-dark-desktop-galaxy.png` |
@@ -97,7 +97,7 @@ swapped `navigator.getGamepads`.
 | Requirement | Status | Evidence |
 |---|---|---|
 | Unit tests: resources / upgrades / saves | ✅ | 73 tests, `node --test tests/unit/` |
-| Interaction tests | ✅ | 4 suites, real Chromium |
+| Interaction tests | ✅ | 5 suites, real Chromium (`responsive`, `themes`, `inputs`, `gameplay`, `performance`) |
 | `docs/ARCHITECTURE.md` | ✅ | present |
 | `docs/GAMEPLAY.md` | ✅ | present |
 | `docs/INPUTS.md` | ✅ | present |

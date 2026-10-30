@@ -56,13 +56,16 @@
   --shadow: 0 8px 24px #16202f14;
 }
 
+/* OLED: every large area is literally #000 so unlit pixels stay unlit; regions
+   are separated by borders, and only small inset controls are lifted slightly
+   so they remain visibly tappable. */
 [data-theme='oled'] {
   color-scheme: dark;
   --bg: #000000;
   --bg-deep: #000000;
-  --surface: #050505;
-  --surface-2: #0a0a0a;
-  --surface-3: #121212;
+  --surface: #000000;
+  --surface-2: #000000;
+  --surface-3: #0b0b0b;
   --fg: #f5f7fa;
   --fg-strong: #ffffff;
   --muted: #9aa4b2;
