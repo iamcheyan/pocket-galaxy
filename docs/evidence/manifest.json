@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-10-30T13:51:29.219Z",
+  "capturedAt": "2026-10-30T14:09:40.454Z",
   "captures": [
     {
       "file": "docs/evidence/theme-dark-desktop-galaxy.png",
@@ -8,8 +8,8 @@
       "quality": "high",
       "width": 1280,
       "height": 800,
-      "bytes": 403839,
-      "sha256_12": "33f65955301f"
+      "bytes": 386372,
+      "sha256_12": "8e07922dd2e9"
     },
     {
       "file": "docs/evidence/theme-light-desktop-galaxy.png",
@@ -18,8 +18,8 @@
       "quality": "high",
       "width": 1280,
       "height": 800,
-      "bytes": 486217,
-      "sha256_12": "cb396c22cf6f"
+      "bytes": 475682,
+      "sha256_12": "41fcf4b98fe2"
     },
     {
       "file": "docs/evidence/theme-oled-desktop-galaxy.png",
@@ -28,8 +28,8 @@
       "quality": "high",
       "width": 1280,
       "height": 800,
-      "bytes": 290290,
-      "sha256_12": "c7220496bb38"
+      "bytes": 303284,
+      "sha256_12": "4d5f3628e853"
     },
     {
       "file": "docs/evidence/layout-handheld-390x844-galaxy.png",
@@ -38,8 +38,8 @@
       "quality": "high",
       "width": 390,
       "height": 844,
-      "bytes": 173597,
-      "sha256_12": "b3d6bbd47694"
+      "bytes": 173422,
+      "sha256_12": "b8e83a14d823"
     },
     {
       "file": "docs/evidence/layout-tablet-820x1180-galaxy.png",
@@ -48,8 +48,8 @@
       "quality": "high",
       "width": 820,
       "height": 1180,
-      "bytes": 289393,
-      "sha256_12": "acebc2a01b29"
+      "bytes": 295013,
+      "sha256_12": "961c7d7502c8"
     },
     {
       "file": "docs/evidence/layout-eink-390x844-galaxy.png",
@@ -58,8 +58,8 @@
       "quality": "high",
       "width": 390,
       "height": 844,
-      "bytes": 70839,
-      "sha256_12": "f71c048cad8b"
+      "bytes": 73648,
+      "sha256_12": "7304e437f4da"
     },
     {
       "file": "docs/evidence/layout-eink-1280x800-galaxy.png",
@@ -68,8 +68,8 @@
       "quality": "high",
       "width": 1280,
       "height": 800,
-      "bytes": 86573,
-      "sha256_12": "8d9b2b707df5"
+      "bytes": 76229,
+      "sha256_12": "ac7fe64503de"
     },
     {
       "file": "docs/evidence/page-galaxy-desktop.png",
@@ -80,8 +80,8 @@
       "height": 800,
       "scrollWidth": 1280,
       "clientWidth": 1280,
-      "bytes": 393973,
-      "sha256_12": "c504b7aadf7e"
+      "bytes": 399130,
+      "sha256_12": "7c0a9da50036"
     },
     {
       "file": "docs/evidence/page-galaxy-handheld.png",
@@ -92,8 +92,8 @@
       "height": 844,
       "scrollWidth": 390,
       "clientWidth": 390,
-      "bytes": 165467,
-      "sha256_12": "47546cfd81ab"
+      "bytes": 172315,
+      "sha256_12": "d7c66089d7e6"
     },
     {
       "file": "docs/evidence/page-shipyard-desktop.png",
@@ -128,8 +128,8 @@
       "height": 800,
       "scrollWidth": 1280,
       "clientWidth": 1280,
-      "bytes": 148277,
-      "sha256_12": "e7a88d0039cd"
+      "bytes": 148037,
+      "sha256_12": "67de84fa4c1c"
     },
     {
       "file": "docs/evidence/page-showcase-desktop.png",
@@ -164,8 +164,8 @@
       "height": 800,
       "scrollWidth": 1280,
       "clientWidth": 1280,
-      "bytes": 68615,
-      "sha256_12": "9a039adbb148"
+      "bytes": 68625,
+      "sha256_12": "110ab827f8ca"
     },
     {
       "file": "docs/evidence/page-settings-desktop.png",
@@ -210,9 +210,9 @@
       "quality": "high",
       "width": 1280,
       "height": 800,
-      "fps": "59.9",
-      "bytes": 412671,
-      "sha256_12": "38520127e184"
+      "fps": "60.2",
+      "bytes": 382267,
+      "sha256_12": "8a2eedcfbc5b"
     },
     {
       "file": "docs/evidence/benchmark-desktop.png",
@@ -220,8 +220,8 @@
       "layout": "desktop",
       "width": 1280,
       "height": 800,
-      "bytes": 148261,
-      "sha256_12": "95335a2a919c"
+      "bytes": 147782,
+      "sha256_12": "ca2de8a1ade6"
     },
     {
       "file": "docs/evidence/quality-low-desktop.png",
@@ -232,8 +232,8 @@
       "level": "low",
       "particles": 54,
       "budgetParticles": 90,
-      "bytes": 163835,
-      "sha256_12": "6bc29975d1f6"
+      "bytes": 159475,
+      "sha256_12": "be9112cca40a"
     },
     {
       "file": "docs/evidence/quality-high-desktop.png",
@@ -244,8 +244,8 @@
       "level": "high",
       "particles": 288,
       "budgetParticles": 900,
-      "bytes": 421947,
-      "sha256_12": "3fe158dc5dfb"
+      "bytes": 401709,
+      "sha256_12": "5153c679863d"
     },
     {
       "file": "docs/evidence/input-keyboard-debug.png",
@@ -277,8 +277,8 @@
       },
       "discovered": 14,
       "scale": "medium",
-      "bytes": 384363,
-      "sha256_12": "c278cb186c41"
+      "bytes": 417447,
+      "sha256_12": "efbbf615211c"
     },
     {
       "file": "docs/evidence/loop-2-expand-confirm.png",
@@ -301,8 +301,8 @@
       },
       "bodies": 1200,
       "scale": "huge",
-      "bytes": 531986,
-      "sha256_12": "036c6bde70cf"
+      "bytes": 524766,
+      "sha256_12": "6dd104c89a77"
     }
   ]
 }

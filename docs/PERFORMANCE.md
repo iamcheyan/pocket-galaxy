@@ -50,8 +50,8 @@ rather than guessed.
 
 ### Two real runs on this host
 
-Same machine, same session, back-to-back (headless Chromium 152, 1280×800 @1x,
-16 cores):
+`npm run benchmark -- 2` — same machine, same session, back-to-back (headless
+Chromium 152, 1280×800 @1x, 16 cores), taken from the *latest* pair:
 
 | Objects | Run 1 frames | Run 1 avg FPS | Run 2 frames | Run 2 avg FPS |
 |---:|---:|---:|---:|---:|
@@ -59,50 +59,57 @@ Same machine, same session, back-to-back (headless Chromium 152, 1280×800 @1x,
 | 500 | 108 | 60.0 | 108 | 60.0 |
 | 1 000 | 108 | 60.0 | 108 | 60.0 |
 | 3 000 | 108 | 60.0 | 108 | 60.0 |
-| 5 000 | 108 | 60.0 | 108 | 60.0 |
-| 10 000 | 65 | 37.2 | 68 | 39.1 |
+| 5 000 | 99 | 55.0 | 86 | 47.9 |
+| 10 000 | 48 | 26.4 | 34 | 18.3 |
 
-Run 1: Galaxy Score **9 482**, rating **A+**, max stable 10 000.
-Run 2: Galaxy Score **9 668**, rating **A+**, max stable 10 000.
+Run 1: Galaxy Score **8 152**, rating **A**.
+Run 2: Galaxy Score **6 988**, rating **B**.
 
-The two runs differ on the heaviest scene (37.2 vs 39.1 FPS, 65 vs 68 frames) —
-that is the point of running it twice: the harness reports what happened,
-including variance, not a smoothed story. Across every pair captured on this
-host the 10 000-object scene landed between 21.8 and 40.0 FPS; see
-[What the spread means](#what-the-spread-means) for the range and its cause.
+An earlier pair on an idle host measured 9 482 / 9 668 (both A+) with the
+10 000-object scene at 37.2 / 39.1 FPS. Both pairs are real; the difference is
+host contention, not code. That is the point of running it twice — the harness
+reports what happened, including variance, instead of a smoothed story. See
+[What the spread means](#what-the-spread-means).
 
 Current captured report (`docs/evidence/benchmark-report.txt`, from
 `npm run evidence`, regenerated on every run and therefore a single snapshot):
 
 ```text
 objects  frames  avgFps  minFps  p95ms   score
-    100     108    60.0    59.5   16.80      60
+    100     109    60.0    59.5   16.80      60
     500     108    60.0    59.5   16.70     300
-   1000     108    60.0    59.5   16.70     600
-   3000     108    60.0    59.5   16.80    1800
-    5000      77    42.8    29.9   33.40    2139
-   10000      43    23.7    15.0   66.70    2367
+   1000     108    60.0    59.5   16.80     600
+   3000      92    51.1    29.9   33.40    1533
+   5000      60    33.0    29.9   33.40    1651
+  10000      31    16.9    15.0   66.70    1691
 
-Galaxy Score: 7266
+Galaxy Score: 5835
 Device Rating: B
 Max Stable Objects: 5000
-Average FPS: 54.8
-Peak Memory: 4.8 MB
+Average FPS: 52.6
+Peak Memory: 6.5 MB
+
+Notes:
+- Below 20 FPS at 10000 objects (16.9 avg).
 ```
 
 ### What the spread means
 
-The same binary on the same host has produced Galaxy Scores from 7 266 to 9 705
-across sessions, with the 10 000-object scene between 21.8 and 40.0 FPS. That is
-a software rasteriser sharing a 16-core box with other work, not a benchmark rig.
-The honest reading:
+The same binary on the same host has produced Galaxy Scores from **5 835 to
+9 705** across sessions, with the 10 000-object scene between **16.9 and 40.0
+FPS** and the 5 000-object scene between **33.0 and 60.0 FPS**. That is a software
+rasteriser sharing a 16-core box with 100+ sequential browser sessions, not a
+benchmark rig. The honest reading:
 
-- **Stable claim**: 60 FPS holds through 1 000 objects in every run, and through
-  5 000 objects whenever the host is not contended.
-- **Variable claim**: 5 000 and 10 000 objects depend on host load, so a single
-  number from this page is a snapshot, not a device rating.
-- **For device acceptance**: run the benchmark on the target, twice, and compare
-  those two runs against each other — that is exactly what the harness supports.
+- **Stable claim**: 60 FPS holds through 1 000 objects in *every* run recorded
+  here, including the most loaded one.
+- **Contention claim**: above 1 000 objects the result tracks host load. The
+  same code scored A+ (9 705) early in the session and B (5 835) after hours of
+  repeated Chromium runs.
+- **For device acceptance**: run the benchmark on the target, twice, back to
+  back, and compare those two runs. `npm run benchmark -- 2` does exactly that
+  and prints a comparison table; absolute values from this host are not a device
+  rating and are not presented as one.
 
 A rating that moves between A+ and B on identical code is the measurement telling
 the truth about its environment.
