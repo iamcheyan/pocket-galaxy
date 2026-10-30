@@ -1,22 +1,19 @@
 # Pocket Galaxy Benchmark
-Date: 2026-10-30T14:09:05.373Z
-Browser: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36
+Date: 2026-10-30T17:16:19.336Z
+Browser: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36
 Viewport: 1280x800 @1x
-CPU cores: 16  Memory hint: 32 GB
+CPU cores: 4  Memory hint: 16 GB
 
 objects  frames  avgFps  minFps  p95ms   score
-    100     109    60.0    59.5   16.80      60
+    100     108    60.0    59.5   16.80      60
     500     108    60.0    59.5   16.70     300
    1000     108    60.0    59.5   16.80     600
-   3000      92    51.1    29.9   33.40    1533
-   5000      60    33.0    29.9   33.40    1651
-  10000      31    16.9    15.0   66.70    1691
+   3000     108    60.0    59.5   16.70    1800
+   5000     107    59.4    30.0   16.80    2972
+  10000      55    30.6    15.0   50.00    3056
 
-Galaxy Score: 5835
-Device Rating: B
-Max Stable Objects: 5000
-Average FPS: 52.6
-Peak Memory: 6.5 MB
-
-Notes:
-- Below 20 FPS at 10000 objects (16.9 avg).
+Galaxy Score: 8788
+Device Rating: A
+Max Stable Objects: 10000
+Average FPS: 57.2
+Peak Memory: 3.4 MB
