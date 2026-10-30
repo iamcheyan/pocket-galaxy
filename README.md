@@ -62,7 +62,7 @@ loop and two benchmarks.
 | Inspect | long press | right click | Y | Y / Triangle |
 | Harvest | Select → Harvest | Select → Harvest | A / Enter | A / Cross |
 | Scan | Scan button | Scan button | X | X / Square |
-| Zoom | pinch / double tap | wheel | `=` / `-` | R1 / L1 |
+| Zoom | pinch / double tap | wheel | `=` / `-` | R1 / L1 / right stick |
 | Pan | drag | drag | arrows on the map | D-pad / stick |
 | Pause | Pause button | Pause button | P / START | START |
 | Perf overlay | Settings switch | Settings switch | F / SELECT | SELECT |

@@ -23,7 +23,7 @@ flowchart LR
 | `back` | Escape, Backspace | B / Circle (1) | Deselect, close menu/modal, return to galaxy |
 | `scan` | Z | X / Square (2) | Scan the selected body |
 | `details` | X | Y / Triangle (3) | Detail modal for the selected body |
-| `zoomOut` `zoomIn` | `-` `=` / `+` | L1 (4) / R1 (5) | Zoom the map |
+| `zoomOut` `zoomIn` | `-` `=` / `+` | L1 (4) / R1 (5), right stick | Zoom the map |
 | `navPrev` `navNext` | `[` `]` | L2 (6) / R2 (7) | Previous / next page |
 | `perf` | F | SELECT (8) | Toggle the performance overlay |
 | `pause` | P | START (9) | Pause / resume |
@@ -90,6 +90,9 @@ but `ArrowDown` + `Enter`.
    mask, and dispatches only edges (`onButtonPress` semantics, no repeat).
 3. Converts left-stick crossing of the 0.55 deadzone into one `up/down/left/right`
    per crossing, so a held stick does not spam actions.
+4. Reads the right stick (axes 2/3) as a zoom throttle: past the deadzone it
+   emits one `zoomIn`/`zoomOut` every 120 ms while held, which reads as
+   continuous zoom without flooding the action queue.
 4. Reports `{connected, id, buttons}` to the store, which the Settings panel shows.
 
 When the Settings panel is listening for a rebind, `onGamepadButton` returns
@@ -106,8 +109,9 @@ restores the original. The press therefore travels the *same* code path a real
 controller uses — the probe cannot pass unless polling, edge detection, mapping
 and dispatch all work.
 
-The interaction suite injects D-pad Right (15), L1/R1, A (0), SELECT (8) and R2
-(7), and asserts the resulting camera/zoom/harvest/rebind state.
+The interaction suite injects D-pad Right (15), L1/R1, A (0), SELECT (8), R2 (7),
+and right-stick deflections through `injectGamepadStick`, asserting the resulting
+camera/zoom/harvest/rebind state.
 
 ## Debug panel
 

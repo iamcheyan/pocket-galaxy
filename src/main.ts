@@ -404,6 +404,7 @@ declare global {
       navigate: (page: PageId) => void;
       router: InputRouter;
       injectGamepad: (button: number) => void;
+      injectGamepadStick: (rightX: number) => void;
     };
   }
 }
@@ -412,4 +413,5 @@ window.__pocketGalaxy = {
   navigate,
   router,
   injectGamepad: (button: number) => router.simulateGamepadButton(button),
+  injectGamepadStick: (rightX: number) => router.simulateGamepadStick(rightX),
 };

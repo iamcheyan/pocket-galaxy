@@ -119,6 +119,7 @@ export class InputRouter {
   private readonly held = new Set<string>();
   private gamepadMask = 0;
   private gamepadAxes = { x: 0, y: 0 };
+  private lastStickZoom = 0;
   private gamepadMap: Record<ActionId, number>;
   private pointers = new Map<number, Point>();
   private dragOrigin: Point | null = null;
@@ -438,8 +439,6 @@ export class InputRouter {
       const axes = { x: pad.axes[0] ?? 0, y: pad.axes[1] ?? 0 };
       const axisEdgeX = Math.abs(axes.x) > AXIS_DEADZONE && Math.abs(this.gamepadAxes.x) <= AXIS_DEADZONE;
       const axisEdgeY = Math.abs(axes.y) > AXIS_DEADZONE && Math.abs(this.gamepadAxes.y) <= AXIS_DEADZONE;
-      const axisReleasedX = Math.abs(axes.x) <= AXIS_DEADZONE;
-      const axisReleasedY = Math.abs(axes.y) <= AXIS_DEADZONE;
       if (axisEdgeY) {
         const action: ActionId = axes.y < 0 ? 'up' : 'down';
         this.log('gamepad', action, `axis ${axes.y.toFixed(2)}`);
@@ -450,10 +449,17 @@ export class InputRouter {
         this.log('gamepad', action, `axis ${axes.x.toFixed(2)}`);
         this.handlers.onAction(action, 'gamepad');
       }
-      if (axisReleasedX || axisReleasedY) {
-        this.gamepadAxes = { x: axes.x, y: axes.y };
-      } else {
-        this.gamepadAxes = { x: axes.x, y: axes.y };
+      this.gamepadAxes = { x: axes.x, y: axes.y };
+
+      // Right stick (axes 2/3) zooms continuously: one zoom step per 120 ms while
+      // held past the deadzone, which feels like a throttle rather than a click.
+      const rightX = pad.axes[2] ?? 0;
+      const now = performance.now();
+      if (Math.abs(rightX) > AXIS_DEADZONE && now - this.lastStickZoom > 120) {
+        this.lastStickZoom = now;
+        const action: ActionId = rightX > 0 ? 'zoomIn' : 'zoomOut';
+        this.log('gamepad', action, `right stick ${rightX.toFixed(2)}`);
+        this.handlers.onAction(action, 'gamepad');
       }
       return {
         connected: true,
@@ -470,6 +476,32 @@ export class InputRouter {
   simulate(action: ActionId, source: InputSource = 'keyboard'): void {
     this.log(source, action, 'simulated');
     this.handlers.onAction(action, source);
+  }
+
+  /** Injects a right-stick deflection so the zoom axis can be verified. */
+  simulateGamepadStick(rightX: number, id = 'Pocket Galaxy Probe Pad (standard)'): void {
+    const pad = {
+      id,
+      index: 0,
+      connected: true,
+      mapping: 'standard',
+      axes: [0, 0, rightX, 0],
+      buttons: Array.from({ length: 17 }, () => ({ pressed: false, touched: false, value: 0 })),
+      timestamp: performance.now(),
+      vibrationActuator: null,
+    };
+    const original = navigator.getGamepads;
+    Object.defineProperty(navigator, 'getGamepads', {
+      configurable: true,
+      writable: true,
+      value: () => [pad],
+    });
+    this.pollGamepad();
+    Object.defineProperty(navigator, 'getGamepads', {
+      configurable: true,
+      writable: true,
+      value: original ?? (() => []),
+    });
   }
 
   simulateGamepadButton(button: number, id = 'Pocket Galaxy Probe Pad (standard)'): void {

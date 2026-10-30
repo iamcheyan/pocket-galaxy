@@ -200,6 +200,17 @@ try {
     const zoomAfter = await page.evaluate(() => window.__pocketGalaxy.store.state.camera.zoom);
     check('gamepad: R1 zooms in', zoomAfter > zoomBefore, `${zoomBefore} → ${zoomAfter}`);
 
+    // Right stick zooms (axes 2/3), the documented "joystick zoom" mapping.
+    const stickBefore = await page.evaluate(() => window.__pocketGalaxy.store.state.camera.zoom);
+    await page.evaluate(() => window.__pocketGalaxy.injectGamepadStick(0.9));
+    await sleep(160);
+    const stickAfter = await page.evaluate(() => window.__pocketGalaxy.store.state.camera.zoom);
+    check('gamepad: right stick zooms in', stickAfter > stickBefore, `${stickBefore} → ${stickAfter}`);
+    await page.evaluate(() => window.__pocketGalaxy.injectGamepadStick(-0.9));
+    await sleep(160);
+    const stickBack = await page.evaluate(() => window.__pocketGalaxy.store.state.camera.zoom);
+    check('gamepad: right stick zooms out', stickBack < stickAfter, `${stickAfter} → ${stickBack}`);
+
     // SELECT (index 8) toggles the perf overlay, START (9) pauses.
     await page.evaluate(() => window.__pocketGalaxy.injectGamepad(8));
     await sleep(160);
