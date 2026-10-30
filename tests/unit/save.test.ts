@@ -82,6 +82,15 @@ test('encode → decode preserves game and settings exactly', () => {
   assert.ok(decoded.savedAt > 0);
 });
 
+test('restored saves keep their stats so sessions can be counted', () => {
+  const game = createNewGame('small', 44, NOW);
+  const withSessions = { ...game, stats: { ...game.stats, sessions: 7 } };
+  writeSave(withSessions, defaultSettings());
+  const loaded = readSave();
+  assert.ok(loaded);
+  assert.equal(loaded.state.stats.sessions, 7);
+});
+
 test('v3 envelopes are migrated with catalog designations', () => {
   const game = createNewGame('small', 31, NOW);
   const envelope = JSON.parse(encodeSave(game, defaultSettings()));

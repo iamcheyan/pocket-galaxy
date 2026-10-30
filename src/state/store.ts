@@ -157,6 +157,13 @@ export class Store {
     if (settings.layout !== 'auto') {
       this.state.layout = resolveLayout(settings.layout, caps);
     }
+    // A restored save is being resumed, not started over.
+    if (saved) {
+      this.state.game = {
+        ...game,
+        stats: { ...game.stats, sessions: game.stats.sessions + 1 },
+      };
+    }
     if (!saved) this.persist('new game');
   }
 

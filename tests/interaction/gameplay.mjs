@@ -273,6 +273,8 @@ try {
   const restored = await state(page);
   check('save: reload restores the large galaxy', restored.scale === 'large' && restored.bodies === 620, JSON.stringify(restored));
   check('save: reload restores ship upgrades', restored.upgrades.scanner === expanded.upgrades.scanner);
+  const sessions = await page.evaluate(() => window.__pocketGalaxy.store.state.game.stats.sessions);
+  check('save: resuming a save increments the session counter', sessions >= 1, `sessions=${sessions}`);
   check(
     'save: reload reports that this session was loaded from a save',
     restored.origin === 'loaded',

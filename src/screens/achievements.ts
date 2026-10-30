@@ -25,6 +25,7 @@ const STAT_ROWS: Array<{ label: string; key: string }> = [
   { label: 'Average FPS', key: 'average-fps' },
   { label: 'Achievements', key: 'achievements' },
   { label: 'Galaxy rating', key: 'galaxy-rating' },
+  { label: 'Sessions', key: 'sessions' },
 ];
 
 export function buildAchievementsScreen(store: Store): Screen {
@@ -101,6 +102,7 @@ export function buildAchievementsScreen(store: Store): Screen {
       'average-fps': game.stats.avgFps.toFixed(1),
       achievements: `${unlocked}/${achievements.length}`,
       'galaxy-rating': `${score.label} (${score.value}/100)`,
+      sessions: String(game.stats.sessions),
     };
     for (const [key, cell] of statCells) {
       const next = values[key] ?? '';

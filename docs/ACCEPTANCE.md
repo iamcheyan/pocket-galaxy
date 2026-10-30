@@ -97,7 +97,7 @@ swapped `navigator.getGamepads`.
 
 | Requirement | Status | Evidence |
 |---|---|---|
-| Unit tests: resources / upgrades / saves | ✅ | 76 tests, `node --test tests/unit/` |
+| Unit tests: resources / upgrades / saves | ✅ | 77 tests, `node --test tests/unit/` |
 | Interaction tests | ✅ | 5 suites, real Chromium (`responsive`, `themes`, `inputs`, `gameplay`, `performance`) |
 | `docs/ARCHITECTURE.md` | ✅ | present |
 | `docs/GAMEPLAY.md` | ✅ | present |

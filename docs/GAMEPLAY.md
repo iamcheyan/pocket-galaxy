@@ -146,7 +146,7 @@ Achievements are evaluated from current state on every render — no persistent
 
 Play time, travel distance, discoveries, scans, harvest count, resources and
 science collected, visited planets, upgrades bought, galaxy size, peak FPS,
-average FPS, achievements. Shown in Logbook; the same `Stats` object is saved.
+average FPS, achievements, and the number of sessions resumed. Shown in Logbook; the same `Stats` object is saved.
 
 ## Pause, save, restart
 

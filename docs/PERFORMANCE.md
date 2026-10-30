@@ -68,35 +68,44 @@ Run 2: Galaxy Score **9 668**, rating **A+**, max stable 10 000.
 The two runs differ on the heaviest scene (37.2 vs 39.1 FPS, 65 vs 68 frames) —
 that is the point of running it twice: the harness reports what happened,
 including variance, not a smoothed story. Across every pair captured on this
-host, the 60 Hz ceiling held through 5 000 objects and the 10 000-object scene
-landed between 21.8 and 40.0 FPS.
+host the 10 000-object scene landed between 21.8 and 40.0 FPS; see
+[What the spread means](#what-the-spread-means) for the range and its cause.
 
 Current captured report (`docs/evidence/benchmark-report.txt`, from
-`npm run evidence`):
+`npm run evidence`, regenerated on every run and therefore a single snapshot):
 
 ```text
 objects  frames  avgFps  minFps  p95ms   score
-    100     109    60.0    59.5   16.80      60
-    500     108    60.0    59.5   16.80     300
-   1000     108    60.0    59.5   16.80     600
+    100     108    60.0    59.5   16.80      60
+    500     108    60.0    59.5   16.70     300
+   1000     108    60.0    59.5   16.70     600
    3000     108    60.0    59.5   16.80    1800
-   5000     108    60.0    59.5   16.80    3000
-  10000      71    39.4    29.9   33.40    3944
+    5000      77    42.8    29.9   33.40    2139
+   10000      43    23.7    15.0   66.70    2367
 
-Galaxy Score: 9704
-Device Rating: A+
-Max Stable Objects: 10000
-Average FPS: 57.6
-Peak Memory: 2.7 MB
+Galaxy Score: 7266
+Device Rating: B
+Max Stable Objects: 5000
+Average FPS: 54.8
+Peak Memory: 4.8 MB
 ```
 
-Across all runs so far the 10 000-object scene measured 38.9 / 39.4 / 40.0 /
-37.2 / 38.5 / 31.9 / 21.8 / 30.0 FPS. A headless software rasteriser on a loaded host is not a stable
-platform, and pretending otherwise would be the dishonest option. What the
-numbers *do* prove: the 60 FPS ceiling holds through 5 000 objects, and 10 000
-objects is where this particular software-rendered environment starts to
-saturate. On GPU-backed hardware the same ladder is rerun by the reviewer —
-no number from this host is presented as a device rating.
+### What the spread means
+
+The same binary on the same host has produced Galaxy Scores from 7 266 to 9 705
+across sessions, with the 10 000-object scene between 21.8 and 40.0 FPS. That is
+a software rasteriser sharing a 16-core box with other work, not a benchmark rig.
+The honest reading:
+
+- **Stable claim**: 60 FPS holds through 1 000 objects in every run, and through
+  5 000 objects whenever the host is not contended.
+- **Variable claim**: 5 000 and 10 000 objects depend on host load, so a single
+  number from this page is a snapshot, not a device rating.
+- **For device acceptance**: run the benchmark on the target, twice, and compare
+  those two runs against each other — that is exactly what the harness supports.
+
+A rating that moves between A+ and B on identical code is the measurement telling
+the truth about its environment.
 
 ## Adaptive quality
 

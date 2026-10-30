@@ -19,7 +19,7 @@ flowchart TD
 Two rules keep this tractable:
 
 1. **`src/core/*` never touches the DOM, `window`, or timers.** Every rule is
-   pure: state in, new state out. That is why 76 unit tests run in Node in under
+   pure: state in, new state out. That is why 77 unit tests run in Node in under
    a second and exercise the exact functions the UI calls.
 2. **One render loop.** Only the galaxy screen paints the map, from one
    `requestAnimationFrame` loop. DOM is updated on a 4 Hz budget and only when a
