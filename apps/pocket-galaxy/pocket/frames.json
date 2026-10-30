@@ -1,0 +1,24 @@
+{
+  "frames": 150,
+  "events": [
+    { "frame": 20, "button": "DOWN" },
+    { "frame": 36, "button": "SQUARE" },
+    { "frame": 56, "button": "RTRIGGER" },
+    { "frame": 72, "button": "DOWN" },
+    { "frame": 84, "button": "DOWN" },
+    { "frame": 96, "button": "RTRIGGER" },
+    { "frame": 112, "button": "RTRIGGER" },
+    { "frame": 128, "button": "DOWN" },
+    { "frame": 138, "button": "CIRCLE" }
+  ],
+  "captures": [
+    { "frame": 10, "name": "galaxy" },
+    { "frame": 28, "name": "galaxy-selected" },
+    { "frame": 48, "name": "galaxy-scanned" },
+    { "frame": 66, "name": "shipyard" },
+    { "frame": 80, "name": "shipyard-focus" },
+    { "frame": 108, "name": "logbook" },
+    { "frame": 124, "name": "settings" },
+    { "frame": 146, "name": "settings-toggled" }
+  ]
+}

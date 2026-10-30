@@ -1,0 +1,30 @@
+{
+  "$schema": "https://pocketjs.dev/schema/pocket-2.json",
+  "pocket": 2,
+  "id": "dev.pocket-galaxy.galaxy",
+  "name": "pocket-galaxy",
+  "title": "Pocket Galaxy",
+  "version": "1.0.0",
+  "engine": {
+    "capabilities": {
+      "requires": [
+        "text.glyphs.baked",
+        "input.buttons"
+      ]
+    }
+  },
+  "app": {
+    "entry": "src/main.tsx",
+    "output": "pocket-galaxy",
+    "framework": "solid",
+    "viewport": {
+      "fixed": {
+        "logical": [
+          360,
+          240
+        ],
+        "presentation": "native"
+      }
+    }
+  }
+}

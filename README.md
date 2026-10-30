@@ -1,5 +1,12 @@
 # Pocket Galaxy
 
+
+> **PocketJS port (product target):** `apps/pocket-galaxy/pocket/` is the
+> native PocketJS program (Solid TSX → `.pocket` → `pocket-linux-kms`). The
+> root `src/` remains the frozen React/Canvas design reference and is not
+> extended. Frames: `docs/pocket/`; pattern: `docs/POCKETJS-PORT-PATTERN.md`;
+> verification: `apps/pocket-galaxy/POCKETJS-VERIFICATION.md`.
+
 **Pocket Galaxy is the PocketJS showcase game and the PJOS performance/input
 probe.** One app that is simultaneously a playable galaxy exploration game, a
 live PocketJS capability demo, a frame-time/benchmark harness, an input

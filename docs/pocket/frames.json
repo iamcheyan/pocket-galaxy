@@ -1,0 +1,66 @@
+{
+  "app": "dev.pocket-galaxy.galaxy",
+  "output": "pocket-galaxy",
+  "viewport": {
+    "logical": [
+      360,
+      240
+    ],
+    "density": 2,
+    "physical": [
+      720,
+      480
+    ]
+  },
+  "frames": 150,
+  "shots": [
+    {
+      "name": "galaxy",
+      "file": "screen-galaxy.png",
+      "sha256": "eae27011a2e16d4b9ffa3adb4321f7ff593809c455d9a256a6c678217c3a77c8",
+      "bytes": 39288
+    },
+    {
+      "name": "galaxy-selected",
+      "file": "screen-galaxy-selected.png",
+      "sha256": "465dd68cd62274d83084768ea911a2e1931c182f418e04a4b59f7b8a84a835ca",
+      "bytes": 38953
+    },
+    {
+      "name": "galaxy-scanned",
+      "file": "screen-galaxy-scanned.png",
+      "sha256": "da3552b27cb474c1425babf5c7a684d2d19f8841cf0b26cbb65020e67db9d16d",
+      "bytes": 39015
+    },
+    {
+      "name": "shipyard",
+      "file": "screen-shipyard.png",
+      "sha256": "02a4f1697e0d166bf04be5eb5d56bd2f71b7673e13ea2bf9cab797cbae80bf01",
+      "bytes": 46781
+    },
+    {
+      "name": "shipyard-focus",
+      "file": "screen-shipyard-focus.png",
+      "sha256": "02a21a5dff9789777fd25d309b846a03481f824b4bc24796a9ca467fd88d9688",
+      "bytes": 47604
+    },
+    {
+      "name": "logbook",
+      "file": "screen-logbook.png",
+      "sha256": "38aeeb3d2f88a82426eb82a9d00cb2164ea84c9ea42c4200f213d240e752d2f1",
+      "bytes": 49441
+    },
+    {
+      "name": "settings",
+      "file": "screen-settings.png",
+      "sha256": "c1ba26a6dffa27f9baf76f3148f8ec6732402f423f6a6285504a26bb1fab3480",
+      "bytes": 43338
+    },
+    {
+      "name": "settings-toggled",
+      "file": "screen-settings-toggled.png",
+      "sha256": "3c6bcc7d943c8c763e4a2c0f9ec202f014e21f6979c2585015ce694a27e2d6b7",
+      "bytes": 44645
+    }
+  ]
+}
