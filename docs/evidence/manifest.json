@@ -1,0 +1,308 @@
+{
+  "capturedAt": "2026-10-30T12:45:58.184Z",
+  "captures": [
+    {
+      "file": "docs/evidence/theme-dark-desktop-galaxy.png",
+      "theme": "dark",
+      "layout": "desktop",
+      "quality": "high",
+      "width": 1280,
+      "height": 800,
+      "bytes": 423466,
+      "sha256_12": "ffa8300f7065"
+    },
+    {
+      "file": "docs/evidence/theme-light-desktop-galaxy.png",
+      "theme": "light",
+      "layout": "desktop",
+      "quality": "high",
+      "width": 1280,
+      "height": 800,
+      "bytes": 520526,
+      "sha256_12": "eb894314ce1d"
+    },
+    {
+      "file": "docs/evidence/theme-oled-desktop-galaxy.png",
+      "theme": "oled",
+      "layout": "desktop",
+      "quality": "high",
+      "width": 1280,
+      "height": 800,
+      "bytes": 297571,
+      "sha256_12": "1b705b6f18c7"
+    },
+    {
+      "file": "docs/evidence/layout-handheld-390x844-galaxy.png",
+      "theme": "dark",
+      "layout": "handheld",
+      "quality": "high",
+      "width": 390,
+      "height": 844,
+      "bytes": 193985,
+      "sha256_12": "4372226d2efa"
+    },
+    {
+      "file": "docs/evidence/layout-tablet-820x1180-galaxy.png",
+      "theme": "dark",
+      "layout": "tablet",
+      "quality": "high",
+      "width": 820,
+      "height": 1180,
+      "bytes": 310478,
+      "sha256_12": "88b48d7babad"
+    },
+    {
+      "file": "docs/evidence/layout-eink-390x844-galaxy.png",
+      "theme": "light",
+      "layout": "eink",
+      "quality": "high",
+      "width": 390,
+      "height": 844,
+      "bytes": 180094,
+      "sha256_12": "42684aad949d"
+    },
+    {
+      "file": "docs/evidence/layout-eink-1280x800-galaxy.png",
+      "theme": "light",
+      "layout": "eink",
+      "quality": "high",
+      "width": 1280,
+      "height": 800,
+      "bytes": 273817,
+      "sha256_12": "72124b38ba96"
+    },
+    {
+      "file": "docs/evidence/page-galaxy-desktop.png",
+      "theme": "dark",
+      "layout": "desktop",
+      "quality": "high",
+      "width": 1280,
+      "height": 800,
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "bytes": 406357,
+      "sha256_12": "9bbf93c1c8b5"
+    },
+    {
+      "file": "docs/evidence/page-galaxy-handheld.png",
+      "theme": "dark",
+      "layout": "handheld",
+      "quality": "high",
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "bytes": 208693,
+      "sha256_12": "1309ffb31e92"
+    },
+    {
+      "file": "docs/evidence/page-shipyard-desktop.png",
+      "theme": "dark",
+      "layout": "desktop",
+      "quality": "high",
+      "width": 1280,
+      "height": 800,
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "bytes": 97316,
+      "sha256_12": "fbd100c0368d"
+    },
+    {
+      "file": "docs/evidence/page-shipyard-handheld.png",
+      "theme": "dark",
+      "layout": "handheld",
+      "quality": "high",
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "bytes": 61612,
+      "sha256_12": "bd42270ed97f"
+    },
+    {
+      "file": "docs/evidence/page-benchmark-desktop.png",
+      "theme": "dark",
+      "layout": "desktop",
+      "quality": "high",
+      "width": 1280,
+      "height": 800,
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "bytes": 46404,
+      "sha256_12": "360ad693aa12"
+    },
+    {
+      "file": "docs/evidence/page-showcase-desktop.png",
+      "theme": "dark",
+      "layout": "desktop",
+      "quality": "high",
+      "width": 1280,
+      "height": 800,
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "bytes": 93902,
+      "sha256_12": "1b23cdcc5f9f"
+    },
+    {
+      "file": "docs/evidence/page-showcase-handheld.png",
+      "theme": "dark",
+      "layout": "handheld",
+      "quality": "high",
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "bytes": 55165,
+      "sha256_12": "d7c1a9bdb42d"
+    },
+    {
+      "file": "docs/evidence/page-logbook-desktop.png",
+      "theme": "dark",
+      "layout": "desktop",
+      "quality": "high",
+      "width": 1280,
+      "height": 800,
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "bytes": 81014,
+      "sha256_12": "02649ddff927"
+    },
+    {
+      "file": "docs/evidence/page-settings-desktop.png",
+      "theme": "dark",
+      "layout": "desktop",
+      "quality": "high",
+      "width": 1280,
+      "height": 800,
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "bytes": 123071,
+      "sha256_12": "837b6d082afd"
+    },
+    {
+      "file": "docs/evidence/page-settings-handheld.png",
+      "theme": "dark",
+      "layout": "handheld",
+      "quality": "high",
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "bytes": 74118,
+      "sha256_12": "177deb7fd480"
+    },
+    {
+      "file": "docs/evidence/page-settings-eink.png",
+      "theme": "light",
+      "layout": "eink",
+      "quality": "high",
+      "width": 1280,
+      "height": 800,
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "bytes": 71931,
+      "sha256_12": "f1c889bd540e"
+    },
+    {
+      "file": "docs/evidence/perf-overlay-desktop.png",
+      "theme": "dark",
+      "layout": "desktop",
+      "quality": "high",
+      "width": 1280,
+      "height": 800,
+      "fps": "59.9",
+      "bytes": 397910,
+      "sha256_12": "1ad5ba017419"
+    },
+    {
+      "file": "docs/evidence/benchmark-desktop.png",
+      "theme": "dark",
+      "layout": "desktop",
+      "width": 1280,
+      "height": 800,
+      "bytes": 148376,
+      "sha256_12": "3d1107122ff1"
+    },
+    {
+      "file": "docs/evidence/quality-low-desktop.png",
+      "theme": "dark",
+      "layout": "desktop",
+      "width": 1280,
+      "height": 800,
+      "level": "low",
+      "particles": 54,
+      "budgetParticles": 90,
+      "bytes": 169432,
+      "sha256_12": "1a239fe546ed"
+    },
+    {
+      "file": "docs/evidence/quality-high-desktop.png",
+      "theme": "dark",
+      "layout": "desktop",
+      "width": 1280,
+      "height": 800,
+      "level": "high",
+      "particles": 288,
+      "budgetParticles": 900,
+      "bytes": 412185,
+      "sha256_12": "8330037ec4e9"
+    },
+    {
+      "file": "docs/evidence/input-keyboard-debug.png",
+      "theme": "dark",
+      "layout": "desktop",
+      "width": 1280,
+      "height": 800,
+      "bytes": 130878,
+      "sha256_12": "a2353326d723"
+    },
+    {
+      "file": "docs/evidence/input-gamepad-debug.png",
+      "theme": "dark",
+      "layout": "desktop",
+      "width": 1280,
+      "height": 800,
+      "bytes": 139958,
+      "sha256_12": "27b930238b38"
+    },
+    {
+      "file": "docs/evidence/loop-1-before-expand.png",
+      "theme": "dark",
+      "layout": "desktop",
+      "width": 1280,
+      "height": 800,
+      "rating": {
+        "value": 19,
+        "label": "E"
+      },
+      "discovered": 14,
+      "scale": "medium",
+      "bytes": 381505,
+      "sha256_12": "9b614b334b98"
+    },
+    {
+      "file": "docs/evidence/loop-2-expand-confirm.png",
+      "theme": "dark",
+      "layout": "desktop",
+      "width": 1280,
+      "height": 800,
+      "bytes": 91215,
+      "sha256_12": "06475299fb5a"
+    },
+    {
+      "file": "docs/evidence/loop-3-after-expand.png",
+      "theme": "dark",
+      "layout": "desktop",
+      "width": 1280,
+      "height": 800,
+      "rating": {
+        "value": 32,
+        "label": "D"
+      },
+      "bodies": 1200,
+      "scale": "huge",
+      "bytes": 562709,
+      "sha256_12": "6e279f345251"
+    }
+  ]
+}

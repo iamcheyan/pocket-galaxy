@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-layout="desktop" data-quality="high" data-anim="on">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0b0f16" />
+    <title>Pocket Galaxy — PocketJS showcase &amp; PJOS probe</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles/app.css?v=15" />
+    <script>
+      // Apply theme/layout flags before first paint to avoid a light flash on
+      // dark/OLED sessions. Values mirror what the store persists.
+      (function () {
+        try {
+          var settings = JSON.parse(localStorage.getItem('pocket-galaxy.settings.v1') || 'null');
+          if (settings) {
+            if (settings.theme) document.documentElement.dataset.theme = settings.theme;
+            if (settings.animations === false) document.documentElement.dataset.anim = 'off';
+          }
+        } catch (error) {
+          /* storage blocked → defaults stand */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="./dist/app.js?v=15"></script>
+  </body>
+</html>
