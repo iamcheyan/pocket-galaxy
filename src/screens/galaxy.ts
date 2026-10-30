@@ -44,6 +44,7 @@ export function buildGalaxyScreen(store: Store): Screen {
   let running = false;
   let lastPaletteRefresh = 0;
   let lastUiUpdate = 0;
+  let lastPaint = 0;
   let palette = readPalette();
   let paletteTheme = document.documentElement.dataset.theme ?? '';
 
@@ -55,6 +56,16 @@ export function buildGalaxyScreen(store: Store): Screen {
 
   const loop = (timestamp: number) => {
     if (!running) return;
+    // Frame pacing: e-ink panels cannot refresh faster than ~10-20 Hz (60 Hz
+    // repaint burns CPU and ghosts), and the low budget deliberately targets
+    // 30 Hz. Skip a frame whenever the budget asks for more than 20 ms.
+    const targetMs = store.state.budget.targetFrameMs;
+    if (targetMs > 20 && timestamp - lastPaint < targetMs) {
+      frameId = requestAnimationFrame(loop);
+      return;
+    }
+    lastPaint = timestamp;
+    store.monitor.setTargetFrameMs(store.state.budget.targetFrameMs);
     const rect = stage.getBoundingClientRect();
     if (rect.width > 0 && rect.height > 0) {
       renderer.resize(rect.width, rect.height, window.devicePixelRatio || 1);

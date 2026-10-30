@@ -311,7 +311,12 @@ export class Store {
 
   /* ------------------------------- runtime ------------------------------- */
 
-  /** Called from the rAF loop with the DOMHighResTimeStamp. */
+  /**
+   * Records a frame. The map loop calls this every frame; every other screen
+   * calls it from a lightweight rAF chain so run statistics keep accumulating
+   * no matter which page the player is on (and the overlay never shows stale
+   * numbers).
+   */
   frame(timestamp: number, dtMs: number): void {
     this.monitor.push(timestamp);
     const sample = this.monitor.sample();

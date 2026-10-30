@@ -13,8 +13,8 @@
     "test:interaction": "node tests/interaction/run-all.mjs",
     "evidence": "node scripts/evidence.mjs",
     "benchmark": "node scripts/benchmark.mjs",
-    "bump": "node scripts/bump-asset-version.mjs",
-    "verify": "npm run check && npm test && npm run build && npm run test:interaction"
+    "check:assets": "node scripts/check-asset-version.mjs",
+    "verify": "npm run check && npm test && npm run build && npm run check:assets && npm run test:interaction"
   },
   "devDependencies": {
     "esbuild": "0.27.1",

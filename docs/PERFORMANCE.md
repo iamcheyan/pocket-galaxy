@@ -15,7 +15,7 @@ updates from the same objects the renderer just filled.
 | Avg FPS | `1000 / mean(window)` |
 | Frame | last frame delta, ms |
 | p95 | 95th percentile of the rolling window, ms |
-| Jank | share of frames > 33 ms |
+| Jank | share of frames that missed the active target (target + 15% tolerance), so a deliberately 15 Hz e-ink panel reads 0%, not 100% |
 | Memory | `performance.memory.usedJSHeapSize` / limit — `n/a` when the browser has no heap API |
 | Entities | bodies actually drawn this frame |
 | Particles | live particle count |
@@ -24,7 +24,9 @@ updates from the same objects the renderer just filled.
 | Quality | active level, marked `(manual)` when pinned |
 
 `FrameMonitor` also drops gaps > 2000 ms so returning from a hidden tab does not
-poison the average with one giant "frame".
+poison the average with one giant "frame". A cheap background rAF sampler feeds
+the same monitor while a non-map screen is open, so statistics and the overlay
+keep working on Settings / Shipyard / Benchmark instead of freezing.
 
 ## Benchmark
 
@@ -58,36 +60,36 @@ Same machine, same session, back-to-back (headless Chromium 152, 1280×800 @1x,
 | 1 000 | 108 | 60.0 | 108 | 60.0 |
 | 3 000 | 108 | 60.0 | 108 | 60.0 |
 | 5 000 | 108 | 60.0 | 108 | 60.0 |
-| 10 000 | 71 | 39.4 | 72 | 40.0 |
+| 10 000 | 70 | 38.9 | 71 | 39.4 |
 
-Run 1: Galaxy Score **9 705**, rating **A+**, max stable 10 000.
-Run 2: Galaxy Score **9 760**, rating **A+**, max stable 10 000.
+Run 1: Galaxy Score **9 649**, rating **A+**, max stable 10 000, avg 57.6 FPS.
+Run 2: Galaxy Score **9 705**, rating **A+**, max stable 10 000, avg 57.6 FPS.
 
-The two runs differ on the heaviest scene (39.4 vs 40.0 FPS, different frame
-counts) — that is the point of running it twice: the harness reports what
-happened, including variance, not a smoothed story.
+The two runs differ on the heaviest scene (38.9 vs 39.4 FPS, 70 vs 71 frames,
+2.9 vs 8.8 MB heap) — that is the point of running it twice: the harness reports
+what happened, including variance, not a smoothed story.
 
 Current captured report (`docs/evidence/benchmark-report.txt`, from
 `npm run evidence`):
 
 ```text
 objects  frames  avgFps  minFps  p95ms   score
-    100     109    60.0    59.5   16.70      60
+    100     108    60.0    59.5   16.70      60
     500     108    60.0    59.5   16.70     300
-   1000     108    60.0    59.5   16.80     600
-   3000     108    60.0    59.5   16.80    1800
-   5000      95    52.8    29.9   33.40    2639
-  10000      54    30.0    20.0   50.00    3000
+   1000     108    60.0    59.5   16.70     600
+   3000     108    60.0    59.5   16.70    1800
+   5000     108    60.0    59.5   16.70    3000
+  10000      70    38.9    29.9   33.40    3889
 
-Galaxy Score: 8399
-Device Rating: A
+Galaxy Score: 9649
+Device Rating: A+
 Max Stable Objects: 10000
-Average FPS: 56
-Peak Memory: 5.2 MB
+Average FPS: 57.6
+Peak Memory: 2.9 MB
 ```
 
-Across all runs so far the 10 000-object scene measured 39.4 / 40.0 / 37.2 /
-38.5 / 31.9 / 21.8 FPS. A headless software rasteriser on a loaded host is not a stable
+Across all runs so far the 10 000-object scene measured 38.9 / 39.4 / 40.0 /
+37.2 / 38.5 / 31.9 / 21.8 / 30.0 FPS. A headless software rasteriser on a loaded host is not a stable
 platform, and pretending otherwise would be the dishonest option. What the
 numbers *do* prove: the 60 FPS ceiling holds through 5 000 objects, and 10 000
 objects is where this particular software-rendered environment starts to
@@ -122,7 +124,22 @@ still renders monochrome, which is what makes the profile testable off-device.
 | Glow / shadow | on | off | off | off |
 | Max bodies drawn | 4 000 | 1 400 | 600 | 400 |
 | Target frame ms | 17 | 20 | 33 | 66 |
+| Measured frame ms | 16.7 | 16.7 | 33.3 | 66.7 |
+| Measured FPS | 60.0 | 60.0 | 30.0 | 15.0 |
 | Motion scale | 1.0 | 0.85 | 0.6 | 0.25 |
+
+Pacing is enforced, not just budgeted: the loop skips a frame whenever the
+active target exceeds 20 ms, so Low really runs at 30 Hz and E-Ink at 15 Hz
+instead of rendering 60 times a second and wasting the panel.
+
+Measured on this host by forcing each level and sampling after a monitor reset:
+
+| Level | Target | Measured avg FPS | Measured avg frame | Jank |
+|---|---:|---:|---:|---:|
+| High | 17 ms | 60.0 | 16.7 ms | 0% |
+| Medium | 20 ms | 60.0 | 16.7 ms | 0% |
+| Low | 33 ms | 30.0 | 33.3 ms | 0% |
+| E-Ink | 66 ms | 15.0 | 66.7 ms | 0% |
 
 ### Manual trigger and observable difference
 

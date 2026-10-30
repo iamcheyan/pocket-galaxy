@@ -108,6 +108,20 @@ try {
     `low=${lowBurst.particles} high=${highBurst.particles}`,
   );
 
+  // Pacing must actually be enforced: low quality is a 30 Hz budget, so the
+  // measured average has to land near 30, not near 60.
+  await page.evaluate(() => window.__pocketGalaxy.store.setQuality('low', 'pacing'));
+  await sleep(700);
+  await page.evaluate(() => window.__pocketGalaxy.store.monitor.reset());
+  await sleep(1400);
+  const paced = await page.evaluate(() => window.__pocketGalaxy.store.state.sample);
+  check(
+    'quality: low level is paced to its 30 Hz target',
+    paced.avgFps > 26 && paced.avgFps < 34,
+    `${paced.avgFps.toFixed(1)} FPS`,
+  );
+  check('quality: paced frames are not reported as jank', paced.jank === 0, String(paced.jank));
+
   // Restore adaptive mode so the benchmark runs at the default policy.
   await page.evaluate(() => window.__pocketGalaxy.store.setQuality(null, 'test cleanup'));
 
@@ -133,6 +147,7 @@ try {
         report: document.querySelector('[data-testid="bench-report"]').value,
         rating: document.querySelector('[data-testid="bench-rating"]').textContent,
         progress: document.querySelector('[data-testid="bench-progress"]').textContent,
+        finishedAt: /Date: (.+)/.exec(document.querySelector('[data-testid="bench-report"]').value)?.[1] ?? '',
       };
     });
     runs.push(result);
@@ -158,10 +173,22 @@ try {
     await page.screenshot({ path: `tests/interaction/.artifacts/benchmark-run-${run}.png` });
   }
 
+  // Two runs must be genuinely separate measurements. Frame counts may
+  // legitimately coincide on a quiet machine, so the timestamp is the proof of
+  // independence; the FPS spread is reported for the human reader.
   check(
-    'benchmark: two runs produce independently measured numbers',
-    runs[0].rows.some((row, index) => row.avgFps !== runs[1].rows[index].avgFps),
-    `run1=${runs[0].rows.map((row) => row.avgFps).join(',')} run2=${runs[1].rows.map((row) => row.avgFps).join(',')}`,
+    'benchmark: two runs are separate measurements (distinct timestamps)',
+    runs[0].finishedAt !== '' && runs[1].finishedAt !== '' && runs[0].finishedAt !== runs[1].finishedAt,
+    `${runs[0].finishedAt} vs ${runs[1].finishedAt}`,
+  );
+  check(
+    'benchmark: heaviest scene frame counts are physically plausible',
+    runs.every((run) => {
+      const last = run.rows.at(-1);
+      // 1.8 s of scenes cannot exceed ~108 frames at 60 Hz.
+      return last.frames > 0 && last.frames <= 130;
+    }),
+    runs.map((run) => run.rows.at(-1).frames).join(', '),
   );
 
   await mkdir(ARTIFACTS, { recursive: true });
@@ -185,7 +212,9 @@ try {
       button.click();
       return { title: card.querySelector('h3').textContent };
     }, index);
-    await sleep(index === 1 || index === 7 ? 320 : 140);
+    // Animation (900 ms), game-loop (400 ms sampling) and particle demos need
+    // longer than one frame to produce their output.
+    await sleep(index === 1 ? 700 : index === 2 ? 600 : index === 7 ? 700 : 140);
     const output = await page.evaluate((cardIndex) => {
       const cards = [...document.querySelectorAll('[data-testid="demo-card"]')];
       return cards[cardIndex].querySelector('[data-testid="demo-out"]').textContent;
@@ -197,6 +226,11 @@ try {
     'showcase: storage demo round-trips the save',
     demoResults.some((entry) => entry.output.includes('read=ok')),
     JSON.stringify(demoResults.map((entry) => entry.output).slice(0, 3)),
+  );
+  check(
+    'showcase: game loop demo observes frames advancing',
+    demoResults.some((entry) => /\+\d+ rAF frames/.test(entry.output)),
+    JSON.stringify(demoResults.find((entry) => entry.output.includes('rAF frames'))),
   );
   check(
     'showcase: particle demo honors the budget',

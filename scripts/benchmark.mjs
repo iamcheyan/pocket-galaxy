@@ -14,7 +14,21 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const RUNS = Math.max(1, Number(process.argv[2] ?? 2));
 const OUT = process.argv[3] ? path.resolve(process.argv[3]) : null;
-const PORT = Number(process.env.PORT ?? 8124);
+import { createServer } from 'node:net';
+
+async function freePort() {
+  const { promise, resolve, reject } = Promise.withResolvers();
+  const probe = createServer();
+  probe.once('error', reject);
+  probe.listen(0, '127.0.0.1', () => {
+    const address = probe.address();
+    const port = typeof address === 'object' && address ? address.port : 0;
+    probe.close(() => resolve(port));
+  });
+  return promise;
+}
+
+const PORT = Number(process.env.PORT ?? (await freePort()));
 const BASE = `http://127.0.0.1:${PORT}`;
 
 const server = spawn(process.execPath, [path.join(root, 'scripts/serve.mjs')], {
@@ -73,7 +87,9 @@ if (collected.length > 1) {
     const values = collected.map((run) => run.rows[index].avgFps.toFixed(1).padStart(8)).join('');
     console.log(`${label}   ${values}`);
   }
-  console.log('rating    ' + collected.map((run) => run.rating.replace('Rating ', '').padStart(8)).join(''));
+  console.log(
+    'rating    ' + collected.map((run) => (/·\s*(\d+)/.exec(run.rating)?.[1] ?? run.rating).padStart(8)).join(''),
+  );
 }
 
 if (OUT) {

@@ -178,6 +178,30 @@ try {
   await page.keyboard.press('p');
   await sleep(120);
 
+  /* -------------------- stats accumulate off the map --------------------- */
+
+  await page.evaluate(() => window.__pocketGalaxy.navigate('settings'));
+  await sleep(1600);
+  const offMap = await page.evaluate(() => ({
+    peak: window.__pocketGalaxy.store.state.game.stats.peakFps,
+    avg: window.__pocketGalaxy.store.state.game.stats.avgFps,
+  }));
+  check(
+    'stats: FPS keeps measuring while a non-map screen is open',
+    offMap.peak > 0 && offMap.avg > 0,
+    JSON.stringify(offMap),
+  );
+  const logbook = await page.evaluate(() => {
+    window.__pocketGalaxy.navigate('achievements');
+    return true;
+  });
+  void logbook;
+  await sleep(400);
+  const peakText = await page.evaluate(
+    () => document.querySelector('[data-testid="stat-peak-fps"]')?.textContent ?? '',
+  );
+  check('stats: logbook shows a real peak FPS', Number(peakText) > 0, peakText);
+
   /* -------------------------------- saves -------------------------------- */
 
   await page.evaluate(() => window.__pocketGalaxy.navigate('settings'));

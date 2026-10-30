@@ -32,7 +32,7 @@ export const UPGRADES: Record<UpgradeId, UpgradeSpec> = {
     maxLevel: 10,
     baseCost: { energy: 40, mineral: 30, science: 0 },
     growth: 1.55,
-    effect: (level) => `Reach +${level * 9}%`,
+    effect: (level) => (level === 0 ? 'Baseline reach' : `Reach +${level * 9}%`),
   },
   scanner: {
     id: 'scanner',
@@ -41,7 +41,7 @@ export const UPGRADES: Record<UpgradeId, UpgradeSpec> = {
     maxLevel: 10,
     baseCost: { energy: 30, mineral: 20, science: 20 },
     growth: 1.6,
-    effect: (level) => `Scan radius ${(0.09 * level).toFixed(2)} units`,
+    effect: (level) => (level === 0 ? 'Baseline scan radius' : `Scan radius +${(0.09 * level).toFixed(2)} units`),
   },
   shield: {
     id: 'shield',
@@ -50,7 +50,8 @@ export const UPGRADES: Record<UpgradeId, UpgradeSpec> = {
     maxLevel: 10,
     baseCost: { energy: 25, mineral: 45, science: 10 },
     growth: 1.5,
-    effect: (level) => `Damage -${Math.min(70, level * 7)}%`,
+    effect: (level) =>
+      level === 0 ? 'No damage reduction' : `Damage -${Math.min(70, level * 7)}%`,
   },
   cargo: {
     id: 'cargo',

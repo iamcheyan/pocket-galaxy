@@ -32,7 +32,7 @@ test('steady 60 Hz frames measure 60 FPS and zero jank', () => {
   assert.equal(sample.window, 59);
 });
 
-test('jank ratio reflects frames slower than 33 ms', () => {
+test('jank ratio reflects frames slower than the deadline', () => {
   const monitor = new FrameMonitor(120);
   feed(monitor, [16.7, 16.7, 50, 16.7, 16.7, 50, 16.7, 16.7]);
   const sample = monitor.sample();
@@ -40,6 +40,17 @@ test('jank ratio reflects frames slower than 33 ms', () => {
   assert.equal(sample.jank, 2 / 8);
   assert.equal(sample.worstMs, 50);
   assert.ok(sample.p95Ms >= 16.7);
+});
+
+test('the jank threshold follows the active target frame time', () => {
+  const monitor = new FrameMonitor(30);
+  feed(monitor, [66, 66, 66, 66]);
+  assert.equal(monitor.sample().jank, 1, '66 ms frames are jank at a 33 ms target');
+  // E-ink paces deliberately at 66 ms; that must not read as 100% jank.
+  monitor.setTargetFrameMs(66);
+  assert.equal(monitor.sample().jank, 0);
+  feed(monitor, [100], 1000);
+  assert.ok(monitor.sample().jank > 0, 'frames beyond the e-ink target still count');
 });
 
 test('the window is bounded, and totals keep accumulating', () => {

@@ -30,10 +30,11 @@ Nothing is fetched at runtime: no CDN, no fonts, no telemetry. It works from
 
 ```sh
 npm run check              # tsc --noEmit (strict) + native-control guard
-npm test                   # 72 unit tests (node --test)
+npm run check:assets       # ?v= cache-buster matches the built fingerprint
+npm test                   # 73 unit tests (node --test)
 npm run test:interaction   # real Chromium: responsive, inputs, gameplay, performance
 npm run evidence           # regenerates every screenshot in docs/evidence/
-npm run verify             # check + unit + build + interaction
+npm run verify             # check + unit + build + cache-bust + interaction
 ```
 
 The interaction suites launch one Chromium, assert every page keeps

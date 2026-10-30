@@ -149,6 +149,11 @@ average FPS, achievements. Shown in Logbook; the same `Stats` object is saved.
   particle motion; the map keeps rendering so the overlay still measures.
 - **Save**: automatic (debounced 600 ms after any change, plus 1 Hz idle income
   and any risk event), manual via Settings → Save now. localStorage is
-  authoritative; IndexedDB mirrors 1.2 s later.
+  authoritative; IndexedDB mirrors 1.2 s later. The galaxy panel shows a
+  `loaded` / `new game` origin chip next to the byte count, so you can always
+  tell whether the session you are looking at came from a save.
+- **Stats** keep measuring on every screen (a cheap background rAF sampler feeds
+  the same frame monitor), so peak/average FPS in the Logbook reflect the whole
+  session rather than only the time spent on the map.
 - **Restart**: Settings → Restart, confirmed through a self-drawn modal, wipes
   local storage and generates a fresh medium galaxy from a new seed.

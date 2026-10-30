@@ -2,12 +2,27 @@
 // server, and fails if any suite fails. One server, one Chromium per suite.
 
 import { spawn } from 'node:child_process';
+import { createServer } from 'node:net';
 import { setTimeout as delay } from 'node:timers/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const PORT = Number(process.env.PORT ?? 8123);
+
+/** Picks a free loopback port so a stray dev server cannot collide with a run. */
+async function freePort() {
+  const { promise, resolve, reject } = Promise.withResolvers();
+  const probe = createServer();
+  probe.once('error', reject);
+  probe.listen(0, '127.0.0.1', () => {
+    const address = probe.address();
+    const port = typeof address === 'object' && address ? address.port : 0;
+    probe.close(() => resolve(port));
+  });
+  return promise;
+}
+
+const PORT = Number(process.env.PORT ?? (await freePort()));
 const BASE = `http://127.0.0.1:${PORT}`;
 
 const SUITES = ['responsive.mjs', 'inputs.mjs', 'gameplay.mjs', 'performance.mjs'];

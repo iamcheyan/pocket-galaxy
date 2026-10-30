@@ -124,11 +124,16 @@ export function buildShowcaseScreen(store: Store): Screen {
 
   const loopDemo = demo(store, {
     title: 'Game loop',
-    body: 'The galaxy screen runs one rAF loop with fixed-dt clamping; this reads the live counters it publishes.',
+    body: 'The galaxy screen runs one rAF loop with dt clamping. This samples it twice, 400 ms apart, and reports the frame delta between samples.',
     action: 'Sample loop',
-    run: ({ out }) => {
+    run: async ({ out }) => {
+      const first = store.monitor.totals().frames;
+      out.textContent = 'sampling…';
+      await new Promise((resolve) => setTimeout(resolve, 400));
+      const second = store.monitor.totals().frames;
       const sample = store.state.sample;
-      out.textContent = `rAF window ${sample.window} frames · ${sample.avgFps.toFixed(1)} avg FPS · worst ${sample.worstMs.toFixed(1)} ms`;
+      const advanced = store.state.game.tick;
+      out.textContent = `+${second - first} rAF frames in 400 ms (${(((second - first) / 0.4) / 1).toFixed(0)}/s) · ${sample.avgFps.toFixed(1)} avg FPS · worst ${sample.worstMs.toFixed(1)} ms · tick ${advanced}`;
     },
   });
 

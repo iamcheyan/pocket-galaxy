@@ -15,6 +15,16 @@ export interface FrameSample {
 export class FrameMonitor {
   private readonly durations: number[] = [];
   private readonly cap: number;
+  /**
+   * Target frame time. Jank means "missed the deadline", so the threshold is
+   * this value plus 15% scheduling tolerance — an e-ink panel pacing at 66.7 ms
+   * against a 66 ms target is working as designed, not janking.
+   */
+  private targetFrameMs = 33;
+
+  get jankThresholdMs(): number {
+    return this.targetFrameMs * 1.15;
+  }
   private last = 0;
   private totalFrames = 0;
   private totalMs = 0;
@@ -44,6 +54,11 @@ export class FrameMonitor {
     if (instantFps > this.peakFps && instantFps < 240) this.peakFps = instantFps;
     this.ringFps.push(instantFps);
     if (this.ringFps.length > 240) this.ringFps.shift();
+  }
+
+  /** Called when the active quality budget changes the target frame time. */
+  setTargetFrameMs(ms: number): void {
+    this.targetFrameMs = Math.max(10, ms);
   }
 
   markGap(): void {
@@ -79,7 +94,7 @@ export class FrameMonitor {
     const avg = sum / window;
     const sorted = [...this.durations].sort((a, b) => a - b);
     const p95 = sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * 0.95))] as number;
-    const jank = this.durations.filter((value) => value > 33).length / window;
+    const jank = this.durations.filter((value) => value > this.jankThresholdMs).length / window;
     return {
       fps: 1000 / last,
       avgFps: 1000 / avg,

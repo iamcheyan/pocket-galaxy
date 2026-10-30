@@ -346,6 +346,21 @@ store.subscribe(() => {
 
 /* ------------------------------ gamepad poll ----------------------------- */
 
+/**
+ * Background frame sampler. It is deliberately cheap (no rendering): when the
+ * galaxy screen is mounted its own loop feeds the monitor, and this one yields
+ * so frames are not counted twice.
+ */
+let lastIdleFrame = 0;
+const sampleFramesWhileIdle = (timestamp: number) => {
+  if (active !== 'galaxy') {
+    const dt = lastIdleFrame === 0 ? 16.7 : Math.min(200, timestamp - lastIdleFrame);
+    store.frame(timestamp, dt);
+  }
+  lastIdleFrame = timestamp;
+  requestAnimationFrame(sampleFramesWhileIdle);
+};
+
 const pollGamepad = () => {
   const pad = router.pollGamepad();
   const changed = pad.connected !== store.state.gamepad.connected || pad.id !== store.state.gamepad.id;
@@ -377,6 +392,7 @@ firstScreen.onEnter();
 focus.setScope(firstScreen.node);
 syncGestureHost();
 requestAnimationFrame(pollGamepad);
+requestAnimationFrame(sampleFramesWhileIdle);
 
 window.addEventListener('resize', () => store.refreshLayout());
 

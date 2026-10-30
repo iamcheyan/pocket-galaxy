@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-10-30T12:58:35.651Z",
+  "capturedAt": "2026-10-30T13:18:08.496Z",
   "captures": [
     {
       "file": "docs/evidence/theme-dark-desktop-galaxy.png",
@@ -8,8 +8,8 @@
       "quality": "high",
       "width": 1280,
       "height": 800,
-      "bytes": 389225,
-      "sha256_12": "1503012d531c"
+      "bytes": 414286,
+      "sha256_12": "18731f4f18d1"
     },
     {
       "file": "docs/evidence/theme-light-desktop-galaxy.png",
@@ -18,8 +18,8 @@
       "quality": "high",
       "width": 1280,
       "height": 800,
-      "bytes": 480985,
-      "sha256_12": "ed17b84d1bc0"
+      "bytes": 505848,
+      "sha256_12": "62e502edeb25"
     },
     {
       "file": "docs/evidence/theme-oled-desktop-galaxy.png",
@@ -28,8 +28,8 @@
       "quality": "high",
       "width": 1280,
       "height": 800,
-      "bytes": 267941,
-      "sha256_12": "f8c94a89d0dc"
+      "bytes": 288176,
+      "sha256_12": "26a349337f28"
     },
     {
       "file": "docs/evidence/layout-handheld-390x844-galaxy.png",
@@ -38,8 +38,8 @@
       "quality": "high",
       "width": 390,
       "height": 844,
-      "bytes": 169895,
-      "sha256_12": "04ccc1df5f9b"
+      "bytes": 171579,
+      "sha256_12": "ef23dfbcbe69"
     },
     {
       "file": "docs/evidence/layout-tablet-820x1180-galaxy.png",
@@ -48,8 +48,8 @@
       "quality": "high",
       "width": 820,
       "height": 1180,
-      "bytes": 285186,
-      "sha256_12": "54401ca3c8c7"
+      "bytes": 297823,
+      "sha256_12": "5aeb3acb9911"
     },
     {
       "file": "docs/evidence/layout-eink-390x844-galaxy.png",
@@ -58,8 +58,8 @@
       "quality": "high",
       "width": 390,
       "height": 844,
-      "bytes": 69330,
-      "sha256_12": "5fa6876e8675"
+      "bytes": 71061,
+      "sha256_12": "700ab978996c"
     },
     {
       "file": "docs/evidence/layout-eink-1280x800-galaxy.png",
@@ -68,8 +68,8 @@
       "quality": "high",
       "width": 1280,
       "height": 800,
-      "bytes": 85603,
-      "sha256_12": "f9e263e93111"
+      "bytes": 81756,
+      "sha256_12": "3704a1e12918"
     },
     {
       "file": "docs/evidence/page-galaxy-desktop.png",
@@ -80,8 +80,8 @@
       "height": 800,
       "scrollWidth": 1280,
       "clientWidth": 1280,
-      "bytes": 368147,
-      "sha256_12": "22032d104e76"
+      "bytes": 381232,
+      "sha256_12": "43bacd9d1fa4"
     },
     {
       "file": "docs/evidence/page-galaxy-handheld.png",
@@ -92,8 +92,8 @@
       "height": 844,
       "scrollWidth": 390,
       "clientWidth": 390,
-      "bytes": 178147,
-      "sha256_12": "f8cbc246fe98"
+      "bytes": 174121,
+      "sha256_12": "d9d462990974"
     },
     {
       "file": "docs/evidence/page-shipyard-desktop.png",
@@ -104,8 +104,8 @@
       "height": 800,
       "scrollWidth": 1280,
       "clientWidth": 1280,
-      "bytes": 81900,
-      "sha256_12": "729d7bcee522"
+      "bytes": 81337,
+      "sha256_12": "275c9f28b482"
     },
     {
       "file": "docs/evidence/page-shipyard-handheld.png",
@@ -116,8 +116,8 @@
       "height": 844,
       "scrollWidth": 390,
       "clientWidth": 390,
-      "bytes": 47563,
-      "sha256_12": "cdaafc970d13"
+      "bytes": 46758,
+      "sha256_12": "2aa0907f2597"
     },
     {
       "file": "docs/evidence/page-benchmark-desktop.png",
@@ -128,8 +128,8 @@
       "height": 800,
       "scrollWidth": 1280,
       "clientWidth": 1280,
-      "bytes": 147979,
-      "sha256_12": "4ef5e7184088"
+      "bytes": 147888,
+      "sha256_12": "98e90a55a297"
     },
     {
       "file": "docs/evidence/page-showcase-desktop.png",
@@ -140,8 +140,8 @@
       "height": 800,
       "scrollWidth": 1280,
       "clientWidth": 1280,
-      "bytes": 76546,
-      "sha256_12": "ff6c0d6ff21e"
+      "bytes": 77570,
+      "sha256_12": "fe9142a06434"
     },
     {
       "file": "docs/evidence/page-showcase-handheld.png",
@@ -152,8 +152,8 @@
       "height": 844,
       "scrollWidth": 390,
       "clientWidth": 390,
-      "bytes": 43363,
-      "sha256_12": "28286c7bfe37"
+      "bytes": 43096,
+      "sha256_12": "569c71ac34e3"
     },
     {
       "file": "docs/evidence/page-logbook-desktop.png",
@@ -164,8 +164,8 @@
       "height": 800,
       "scrollWidth": 1280,
       "clientWidth": 1280,
-      "bytes": 67314,
-      "sha256_12": "939f6b18753a"
+      "bytes": 67689,
+      "sha256_12": "6df290109048"
     },
     {
       "file": "docs/evidence/page-settings-desktop.png",
@@ -210,9 +210,9 @@
       "quality": "high",
       "width": 1280,
       "height": 800,
-      "fps": "59.9",
-      "bytes": 413547,
-      "sha256_12": "f07656d21404"
+      "fps": "59.5",
+      "bytes": 385378,
+      "sha256_12": "44be24af4b7d"
     },
     {
       "file": "docs/evidence/benchmark-desktop.png",
@@ -220,8 +220,8 @@
       "layout": "desktop",
       "width": 1280,
       "height": 800,
-      "bytes": 147723,
-      "sha256_12": "e87b9907d264"
+      "bytes": 147781,
+      "sha256_12": "cb165a575096"
     },
     {
       "file": "docs/evidence/quality-low-desktop.png",
@@ -232,8 +232,8 @@
       "level": "low",
       "particles": 54,
       "budgetParticles": 90,
-      "bytes": 155345,
-      "sha256_12": "f480bd4f6a58"
+      "bytes": 163813,
+      "sha256_12": "53d1bac436f9"
     },
     {
       "file": "docs/evidence/quality-high-desktop.png",
@@ -244,8 +244,8 @@
       "level": "high",
       "particles": 288,
       "budgetParticles": 900,
-      "bytes": 411467,
-      "sha256_12": "e6b3232ab067"
+      "bytes": 398798,
+      "sha256_12": "a2b6cfbdfa26"
     },
     {
       "file": "docs/evidence/input-keyboard-debug.png",
@@ -262,8 +262,8 @@
       "layout": "desktop",
       "width": 1280,
       "height": 800,
-      "bytes": 130946,
-      "sha256_12": "221a64ae1960"
+      "bytes": 128521,
+      "sha256_12": "06dc0cb85735"
     },
     {
       "file": "docs/evidence/loop-1-before-expand.png",
@@ -277,8 +277,8 @@
       },
       "discovered": 14,
       "scale": "medium",
-      "bytes": 404911,
-      "sha256_12": "61c984d5189f"
+      "bytes": 380692,
+      "sha256_12": "3adf9ec91f17"
     },
     {
       "file": "docs/evidence/loop-2-expand-confirm.png",
@@ -286,8 +286,8 @@
       "layout": "desktop",
       "width": 1280,
       "height": 800,
-      "bytes": 80987,
-      "sha256_12": "e9fa955f4c47"
+      "bytes": 80457,
+      "sha256_12": "993785ce5947"
     },
     {
       "file": "docs/evidence/loop-3-after-expand.png",
@@ -301,8 +301,8 @@
       },
       "bodies": 1200,
       "scale": "huge",
-      "bytes": 524850,
-      "sha256_12": "9000a1d72c24"
+      "bytes": 545537,
+      "sha256_12": "5bf7c5b43766"
     }
   ]
 }

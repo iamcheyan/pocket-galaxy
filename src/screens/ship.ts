@@ -124,7 +124,8 @@ export function buildShipScreen(store: Store): Screen {
     hullValue.textContent = `${game.hull}%`;
     hullMeter.style.width = `${game.hull}%`;
     hullBar.className = `meter${game.hull <= 25 ? ' danger' : game.hull <= 55 ? ' warn' : ''}`;
-    repairCost.textContent = `Repair cost: ${Math.ceil((100 - game.hull) * 0.8)} mineral`;
+    repairCost.textContent =
+      game.hull >= 100 ? 'Hull intact' : `Repair cost: ${Math.ceil((100 - game.hull) * 0.8)} mineral`;
     if (game.hull >= 100) repairButton.setAttribute('disabled', '');
     else repairButton.removeAttribute('disabled');
 

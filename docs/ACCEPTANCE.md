@@ -54,6 +54,8 @@ swapped `navigator.getGamepads`.
 | Galaxy Score + Device Rating | ✅ | `tests/unit/benchmark.test.ts`, report output |
 | Copyable report | ✅ | `Copy report` → clipboard, textarea fallback |
 | Adaptive quality | ✅ | `tests/unit/device.test.ts` hysteresis; `performance.mjs` low/high budgets |
+| Pacing enforced per level (60/60/30/15 FPS) | ✅ | `performance.mjs`: `low level is paced to its 30 Hz target` (26–34 FPS), `paced frames are not reported as jank` |
+| E-Ink playable at 10–20 FPS | ✅ desktop-simulated | measured 15.0 FPS at 66.7 ms, jank 0 |
 | Manual quality trigger with visible difference | ✅ | `performance.mjs`: `high budget spawns more particles`, `force low applies the low budget` |
 | Memory reported honestly (`n/a` fallback) | ✅ | `tests/unit/monitor.test.ts`; `summarize` note path |
 
@@ -94,7 +96,7 @@ swapped `navigator.getGamepads`.
 
 | Requirement | Status | Evidence |
 |---|---|---|
-| Unit tests: resources / upgrades / saves | ✅ | 72 tests, `node --test tests/unit/` |
+| Unit tests: resources / upgrades / saves | ✅ | 73 tests, `node --test tests/unit/` |
 | Interaction tests | ✅ | 4 suites, real Chromium |
 | `docs/ARCHITECTURE.md` | ✅ | present |
 | `docs/GAMEPLAY.md` | ✅ | present |
