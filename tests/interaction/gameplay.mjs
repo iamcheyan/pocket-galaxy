@@ -2,7 +2,7 @@
 // harvest → upgrade → expand), then prove the save survives a page reload with a
 // byte-identical reload path and a rejected corrupt envelope.
 
-import { launch, openPage, gotoApp, makeCheck, sleep } from './harness.mjs';
+import { launch, openPage, gotoApp, makeCheck, reloadApp, sleep } from './harness.mjs';
 
 const BASE = process.env.GALAXY_URL ?? 'http://127.0.0.1:8123';
 
@@ -29,11 +29,16 @@ try {
   const { page, consoleErrors, pageErrors } = await openPage(browser, { width: 1280, height: 800 });
   const { check, failures, lines } = makeCheck();
 
-  // Start from a known state: wipe anything a previous run left behind.
+  // Start from a known state: wipe anything a previous run left behind. The run
+  // stays unpaused because harvesting is refused while paused (by design), so
+  // assertions compare before/after rather than assuming absolute values.
   await gotoApp(page, BASE, '?page=galaxy');
   await page.evaluate(() => {
     localStorage.clear();
-    window.__pocketGalaxy.store.restart('medium');
+    const store = window.__pocketGalaxy.store;
+    store.restart('medium');
+    store.state.toasts = [];
+    store.emit();
   });
   await sleep(400);
 
@@ -170,8 +175,16 @@ try {
 
   /* ------------------------- expand galaxy (modal) ----------------------- */
 
+  // Regression: the modal used to be rebuilt on every unrelated store emit
+  // (~1 Hz), detaching this button before the click could land.
   await page.click('[data-testid="expand-large"]');
-  await sleep(250);
+  await sleep(1400); // cross at least one risk/idle tick with the modal open
+  await page.evaluate(() => {
+    // Force an unrelated emit exactly as the simulation loop would.
+    window.__pocketGalaxy.store.state.toasts = window.__pocketGalaxy.store.state.toasts;
+    window.__pocketGalaxy.store.emit();
+  });
+  await sleep(120);
   const modalText = await page.evaluate(() => document.querySelector('[role="dialog"]')?.textContent ?? '');
   check('expand: confirmation modal is self-drawn (role=dialog)', modalText.includes('Expand to Large'), modalText.slice(0, 60));
   await page.click('[data-testid="modal-expand"]');
@@ -189,9 +202,10 @@ try {
   await page.keyboard.press('p');
   await sleep(160);
   const paused = await page.evaluate(() => window.__pocketGalaxy.store.state.paused);
-  check('gameplay: P pauses', paused === true);
+  check('gameplay: P pauses a running game', paused === true);
   await page.keyboard.press('p');
-  await sleep(120);
+  await sleep(160);
+  check('gameplay: P resumes a paused game', (await page.evaluate(() => window.__pocketGalaxy.store.state.paused)) === false);
 
   /* -------------------- stats accumulate off the map --------------------- */
 
@@ -267,9 +281,7 @@ try {
 
   /* ------------------------- reload restores the run --------------------- */
 
-  await page.reload({ waitUntil: 'networkidle2' });
-  await page.waitForFunction(() => Boolean(window.__pocketGalaxy));
-  await sleep(500);
+  await reloadApp(page);
   const restored = await state(page);
   check('save: reload restores the large galaxy', restored.scale === 'large' && restored.bodies === 620, JSON.stringify(restored));
   check('save: reload restores ship upgrades', restored.upgrades.scanner === expanded.upgrades.scanner);
@@ -287,9 +299,7 @@ try {
   await page.evaluate(() => {
     localStorage.setItem('pocket-galaxy.save.v3', '{"schema":"pocket-galaxy","version":3,"state":{}}');
   });
-  await page.reload({ waitUntil: 'networkidle2' });
-  await page.waitForFunction(() => Boolean(window.__pocketGalaxy));
-  await sleep(500);
+  await reloadApp(page);
   const afterCorrupt = await page.evaluate(() => ({
     origin: window.__pocketGalaxy.store.state.sessionOrigin,
     bodies: window.__pocketGalaxy.store.state.game.galaxy.bodies.length,

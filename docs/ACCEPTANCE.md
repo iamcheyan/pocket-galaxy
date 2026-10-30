@@ -8,13 +8,13 @@ host; no handheld, e-ink reader or tablet hardware was attached.
 
 | Requirement | Status | Evidence |
 |---|---|---|
-| Discover → harvest → upgrade → expand, one full loop | ✅ | `tests/interaction/gameplay.mjs` (26 checks, `gameplay: PASS`) |
+| Discover → harvest → upgrade → expand, one full loop | ✅ | `tests/interaction/gameplay.mjs` (34 checks, `gameplay: PASS`) |
 | Resources Energy / Mineral / Science | ✅ | `tests/unit/game.test.ts`, `src/core/game.ts` |
 | Real save write + read, survives reload | ✅ | gameplay: `save: localStorage envelope exists`, `reload restores the large galaxy` |
 | Real save write + read, IndexedDB mirror | ✅ | gameplay: `save: IndexedDB mirror written` |
 | Corrupt save rejected, not half-loaded | ✅ | gameplay: `corrupt envelope is rejected and a fresh game starts`; `tests/unit/save.test.ts` |
 | Quota exhaustion reported, old save preserved, play continues | ✅ | gameplay: `oversized envelope under full storage reports quota`; unit: `a full storage reports quota, not unavailable` |
-| Pause | ✅ | gameplay: `P pauses`; `tests/unit/game.test.ts` idle/risk pause guards |
+| Pause | ✅ | gameplay: `P pauses a running game` + `P resumes a paused game`; harvest/scan refuse while paused (`tests/unit/game.test.ts`) |
 | Restart | ✅ | gameplay: `restart wipes progress back to a fresh medium galaxy` |
 | Seven body kinds | ✅ | `tests/unit/galaxy.test.ts` — all seven appear in a medium galaxy |
 | Six upgrade tracks | ✅ | `tests/unit/upgrades.test.ts` (cost curve, caps, refusal paths) |

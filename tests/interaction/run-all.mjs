@@ -60,10 +60,23 @@ try {
     console.log(`\n=== ${suite} ===`);
     const child = spawn(process.execPath, [path.join(root, 'tests/interaction', suite)], {
       env: { ...process.env, GALAXY_URL: BASE },
-      stdio: 'inherit',
+      stdio: ['ignore', 'pipe', 'pipe'],
     });
+    // Buffer as well as stream, so a failure can be replayed in the summary
+    // instead of forcing a re-run of the whole suite to see which check failed.
+    let output = '';
+    const forward = (chunk) => {
+      const text = String(chunk);
+      output += text;
+      process.stdout.write(text);
+    };
+    child.stdout.on('data', forward);
+    child.stderr.on('data', forward);
     const code = await new Promise((resolve) => child.on('exit', resolve));
-    results.push({ suite, code });
+    const failedLines = output
+      .split('\n')
+      .filter((line) => line.includes('FAIL') || line.includes('✖'));
+    results.push({ suite, code, failedLines, tail: output.split('\n').slice(-8).join('\n') });
   }
 } finally {
   server.kill('SIGTERM');
@@ -73,6 +86,14 @@ const failed = results.filter((result) => result.code !== 0);
 console.log('\n=== summary ===');
 for (const result of results) {
   console.log(`${result.code === 0 ? 'PASS' : 'FAIL'}  ${result.suite}`);
+  if (result.code !== 0) {
+    for (const line of result.failedLines) console.log(`      ${line.trim()}`);
+    if (result.failedLines.length === 0) {
+      // No assertion failed, so the suite died — the tail is the only clue.
+      console.log('      (crashed; last output)');
+      for (const line of result.tail.split('\n')) console.log(`      | ${line}`);
+    }
+  }
 }
 if (failed.length > 0) {
   console.error(`\n${failed.length} suite(s) failed.`);

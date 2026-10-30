@@ -124,12 +124,22 @@ export function buildToasts(store: Store): { node: HTMLElement; update: () => vo
 
 export function buildModal(store: Store): { node: HTMLElement; update: () => void } {
   const host = el('div');
+  // The store emits about once per second (idle income, risk ticks). Rebuilding
+  // an open dialog on those unrelated emits detaches the button under the
+  // pointer and the click never lands, so the DOM is only rebuilt when the modal
+  // identity actually changes.
+  let rendered: Store['state']['modal'] = null;
   const update = () => {
     const modal = store.state.modal;
     if (!modal) {
-      replaceChildren(host, []);
+      if (rendered !== null) {
+        rendered = null;
+        replaceChildren(host, []);
+      }
       return;
     }
+    if (modal === rendered && host.childElementCount > 0) return;
+    rendered = modal;
     const close = () => {
       store.state.modal = null;
       store.emit();
@@ -176,12 +186,19 @@ export function buildModal(store: Store): { node: HTMLElement; update: () => voi
 
 export function buildContextMenu(store: Store): { node: HTMLElement; update: () => void } {
   const host = el('div');
+  // Same reasoning as the modal: an open menu must survive unrelated emits.
+  let rendered: Store['state']['contextMenu'] = null;
   const update = () => {
     const menu = store.state.contextMenu;
     if (!menu) {
-      replaceChildren(host, []);
+      if (rendered !== null) {
+        rendered = null;
+        replaceChildren(host, []);
+      }
       return;
     }
+    if (menu === rendered && host.childElementCount > 0) return;
+    rendered = menu;
     const close = () => {
       store.state.contextMenu = null;
       store.emit();

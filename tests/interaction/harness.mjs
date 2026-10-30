@@ -85,6 +85,27 @@ export async function openPage(browser, viewport) {
   return { page, consoleErrors, pageErrors };
 }
 
+/**
+ * Reloads with a retry. A headless Chromium on a loaded host can miss the
+ * `networkidle2` window for a page that is already served from cache; retrying
+ * with a looser wait distinguishes that from a genuinely broken reload.
+ */
+export async function reloadApp(page, attempts = 3) {
+  let lastError = null;
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      await page.reload({ waitUntil: attempt === 1 ? 'networkidle2' : 'domcontentloaded', timeout: 45000 });
+      await page.waitForFunction(() => Boolean(window.__pocketGalaxy), { timeout: 20000 });
+      await sleep(400);
+      return;
+    } catch (error) {
+      lastError = error;
+      await sleep(400);
+    }
+  }
+  throw lastError;
+}
+
 export async function gotoApp(page, baseUrl, query = '') {
   await page.goto(`${baseUrl}/${query}`, { waitUntil: 'networkidle2', timeout: 30000 });
   await page.waitForFunction(() => Boolean(window.__pocketGalaxy), { timeout: 15000 });
