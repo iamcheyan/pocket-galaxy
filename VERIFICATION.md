@@ -1,8 +1,8 @@
 # Verification — pocket-galaxy @ 2026-10-31
 
 - Verdict: PASS
-- Commit: `__COMMIT__` (test-script fix + evidence; this document is the following commit)
-- Remote: `__REMOTE__`
+- Commit: `bc9289baa8c9843bd88b3d3a0ad5bb7047eec768` (test-script fix + evidence; this document is the following commit)
+- Remote: `bc9289baa8c9843bd88b3d3a0ad5bb7047eec768`
 - Runtime: static `dist/` served by `node scripts/serve.mjs` on `http://127.0.0.1:8123`, driven in headless Chrome; production bundle from `npm run build`
 - Toolchain: node v22.23.3, Chrome 155.0.8059.84, TypeScript 5.9.3, esbuild 0.27.1
 
