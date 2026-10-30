@@ -189,8 +189,8 @@ export function buildContextMenu(store: Store): { node: HTMLElement; update: () 
     const body = menu.bodyId === null ? null : store.state.game.galaxy.bodies[menu.bodyId] ?? null;
     const items: Array<{ label: string; run: () => void }> = [];
     if (body) {
-      items.push({ label: `Scan ${body.name}`, run: () => store.scan(body.id) });
-      items.push({ label: `Harvest ${body.name}`, run: () => store.harvestBody(body.id) });
+      items.push({ label: `Scan ${body.name} ${body.catalog}`, run: () => store.scan(body.id) });
+      items.push({ label: `Harvest ${body.name} ${body.catalog}`, run: () => store.harvestBody(body.id) });
       items.push({ label: 'Show details', run: () => store.selectBody(body.id) });
     }
     items.push({ label: 'Recenter view', run: () => store.resetView() });

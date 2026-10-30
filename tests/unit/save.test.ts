@@ -75,10 +75,24 @@ test('encode → decode preserves game and settings exactly', () => {
   assert.equal(decoded.schema, 'pocket-galaxy');
   assert.equal(decoded.version, SAVE_VERSION);
   assert.deepEqual(decoded.state.galaxy.bodies, game.galaxy.bodies);
+  assert.equal(decoded.state.galaxy.bodies[0]?.catalog, game.galaxy.bodies[0]?.catalog);
   assert.equal(decoded.state.galaxy.seed, 555);
   assert.equal(decoded.settings.theme, 'oled');
   assert.equal(decoded.settings.particles, false);
   assert.ok(decoded.savedAt > 0);
+});
+
+test('v3 envelopes are migrated with catalog designations', () => {
+  const game = createNewGame('small', 31, NOW);
+  const envelope = JSON.parse(encodeSave(game, defaultSettings()));
+  envelope.version = 3;
+  for (const body of envelope.state.galaxy.bodies) delete body.catalog;
+  const decoded = decodeSave(JSON.stringify(envelope));
+  assert.ok(decoded);
+  assert.equal(decoded.version, SAVE_VERSION);
+  const catalogs = new Set(decoded.state.galaxy.bodies.map((body) => body.catalog));
+  assert.equal(catalogs.size, decoded.state.galaxy.bodies.length);
+  assert.ok(decoded.state.galaxy.bodies.every((body) => /^[A-Z2-9]{2}-[A-Z2-9]{2}$/.test(body.catalog)));
 });
 
 test('decode rejects corrupt, foreign, and future envelopes', () => {
@@ -133,6 +147,22 @@ test('quota exhaustion is reported, and dropping history recovers', () => {
   storage.quotaAt = 200;
   const hardFail = writeSave(game, defaultSettings());
   assert.equal(hardFail.status, 'quota');
+});
+
+test('a full storage reports quota, not unavailable', () => {
+  // Regression: the old write-probe threw once the quota filled, so every save
+  // reported "unavailable" and the player never learned storage was full.
+  const game = createNewGame('small', 71, NOW);
+  storage.map.clear();
+  storage.quotaAt = 0; // every write, including the probe, fails
+  const outcome = writeSave(game, defaultSettings());
+  assert.equal(outcome.status, 'quota');
+  assert.ok(outcome.bytes > 0);
+  // Reads still work: the previously stored save stays readable.
+  storage.quotaAt = null;
+  writeSave(game, defaultSettings());
+  storage.quotaAt = 0;
+  assert.ok(readSave());
 });
 
 test('unavailable storage degrades to a status instead of throwing', () => {

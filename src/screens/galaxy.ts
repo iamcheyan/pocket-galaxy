@@ -127,7 +127,7 @@ export function buildGalaxyScreen(store: Store): Screen {
     const point = toGalaxy(clientX, clientY);
     const scale = (Math.min(stage.clientWidth, stage.clientHeight) / 2.35) * store.state.camera.zoom;
     const body = store.selectAt(point, Math.max(0.04, 22 / scale));
-    if (body) store.toast(`${BODY_LABELS[body.kind]} · ${body.name}`, 'info');
+    if (body) store.toast(`${BODY_LABELS[body.kind]} · ${body.name} ${body.catalog}`, 'info');
     return body;
   };
 
@@ -235,7 +235,10 @@ export function buildGalaxyScreen(store: Store): Screen {
     const inRange = Math.hypot(body.x, body.y) <= reach || body.scanned;
     replaceChildren(detail, [
       el('div', { class: 'row between' }, [
-        el('strong', { text: body.name, 'data-testid': 'detail-name' }),
+        el('div', { class: 'stack', style: 'gap:0;min-width:0' }, [
+          el('strong', { text: body.name, 'data-testid': 'detail-name' }),
+          el('span', { class: 'mono tiny muted', 'data-testid': 'detail-catalog', text: body.catalog }),
+        ]),
         el('span', { class: 'chip', text: BODY_LABELS[body.kind] }),
       ]),
       el('div', { class: 'meter' }, [
@@ -305,6 +308,8 @@ export function buildGalaxyScreen(store: Store): Screen {
               [
                 el('span', { class: 'kind-dot', style: `background:${KIND_COLORS[body.kind]}` }),
                 el('span', { class: 'ellipsis', text: body.name }),
+                // The catalog keeps two same-named bodies distinguishable.
+                el('span', { class: 'mono tiny muted', text: body.catalog }),
                 el('span', { class: 'mono tiny muted', text: String(body.deposit) }),
               ],
             ),

@@ -46,6 +46,23 @@ export function bodyName(seed: number): string {
   return `${rng.pick(PREFIXES)} ${rng.pick(SUFFIXES)}`;
 }
 
+/**
+ * Catalog designations. With 16 x 8 = 128 possible names, a 2 400-body galaxy
+ * would otherwise repeat every name ~19 times, making "the Cygni Prime" an
+ * ambiguous reference. The catalog is unique per galaxy and stable for a seed.
+ */
+const CATALOG_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
+export function catalogCode(seed: number, attempt = 0): string {
+  let value = (seed + attempt * 2654435761) >>> 0;
+  let code = '';
+  for (let index = 0; index < 4; index++) {
+    code += CATALOG_ALPHABET[value % CATALOG_ALPHABET.length];
+    value = Math.floor(value / CATALOG_ALPHABET.length);
+  }
+  return `${code.slice(0, 2)}-${code.slice(2)}`;
+}
+
 function pickKind(rng: Rng, armIndex: number, total: number): BodyKind {
   // Outer arms skew toward dust (asteroids), the core toward stars and ruins.
   const outer = armIndex / Math.max(1, total - 1);
@@ -88,6 +105,7 @@ export function generateGalaxy(scale: GalaxyScale, seed: number): Galaxy {
   const config = GALAXY_SCALES[scale];
   const rng = createRng(seed);
   const bodies: Body[] = [];
+  const usedCatalogs = new Set<string>();
   const arms = 3;
   for (let i = 0; i < config.bodies; i++) {
     const arm = i % arms;
@@ -101,6 +119,11 @@ export function generateGalaxy(scale: GalaxyScale, seed: number): Galaxy {
     const [minSize, maxSize] = SIZES[kind];
     const deposit = Math.round(rng.range(minDeposit, maxDeposit));
     const bodySeed = Math.floor(rng.next() * 0xffffffff);
+    let catalog = catalogCode(bodySeed);
+    for (let attempt = 1; usedCatalogs.has(catalog); attempt++) {
+      catalog = catalogCode(bodySeed, attempt);
+    }
+    usedCatalogs.add(catalog);
     bodies.push({
       id: i,
       kind,
@@ -109,6 +132,7 @@ export function generateGalaxy(scale: GalaxyScale, seed: number): Galaxy {
       size: rng.range(minSize, maxSize),
       seed: bodySeed,
       name: bodyName(bodySeed),
+      catalog,
       scanned: false,
       discovered: false,
       deposit,

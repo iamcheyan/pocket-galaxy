@@ -221,7 +221,7 @@ const handleAction = (action: ActionId, source: InputSource) => {
       const body = store.currentBody();
       if (body) {
         store.state.modal = {
-          title: `${body.name} · ${body.kind}`,
+          title: `${body.name} ${body.catalog} · ${body.kind}`,
           body: `Deposit ${body.deposit}/${body.capacity}. Position ${body.x.toFixed(2)}, ${body.y.toFixed(2)}. Scanned: ${body.scanned ? 'yes' : 'no'}.`,
           actions: [
             { label: 'Harvest', run: () => store.harvestBody(body.id) },

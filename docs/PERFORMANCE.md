@@ -60,32 +60,34 @@ Same machine, same session, back-to-back (headless Chromium 152, 1280×800 @1x,
 | 1 000 | 108 | 60.0 | 108 | 60.0 |
 | 3 000 | 108 | 60.0 | 108 | 60.0 |
 | 5 000 | 108 | 60.0 | 108 | 60.0 |
-| 10 000 | 70 | 38.9 | 71 | 39.4 |
+| 10 000 | 65 | 37.2 | 68 | 39.1 |
 
-Run 1: Galaxy Score **9 649**, rating **A+**, max stable 10 000, avg 57.6 FPS.
-Run 2: Galaxy Score **9 705**, rating **A+**, max stable 10 000, avg 57.6 FPS.
+Run 1: Galaxy Score **9 482**, rating **A+**, max stable 10 000.
+Run 2: Galaxy Score **9 668**, rating **A+**, max stable 10 000.
 
-The two runs differ on the heaviest scene (38.9 vs 39.4 FPS, 70 vs 71 frames,
-2.9 vs 8.8 MB heap) — that is the point of running it twice: the harness reports
-what happened, including variance, not a smoothed story.
+The two runs differ on the heaviest scene (37.2 vs 39.1 FPS, 65 vs 68 frames) —
+that is the point of running it twice: the harness reports what happened,
+including variance, not a smoothed story. Across every pair captured on this
+host, the 60 Hz ceiling held through 5 000 objects and the 10 000-object scene
+landed between 21.8 and 40.0 FPS.
 
 Current captured report (`docs/evidence/benchmark-report.txt`, from
 `npm run evidence`):
 
 ```text
 objects  frames  avgFps  minFps  p95ms   score
-    100     108    60.0    59.5   16.70      60
-    500     108    60.0    59.5   16.70     300
-   1000     108    60.0    59.5   16.70     600
-   3000     108    60.0    59.5   16.70    1800
-   5000     108    60.0    59.5   16.70    3000
-  10000      70    38.9    29.9   33.40    3889
+    100     109    60.0    59.5   16.80      60
+    500     108    60.0    59.5   16.80     300
+   1000     108    60.0    59.5   16.80     600
+   3000     108    60.0    59.5   16.80    1800
+   5000     108    60.0    59.5   16.80    3000
+  10000      71    39.4    29.9   33.40    3944
 
-Galaxy Score: 9649
+Galaxy Score: 9704
 Device Rating: A+
 Max Stable Objects: 10000
 Average FPS: 57.6
-Peak Memory: 2.9 MB
+Peak Memory: 2.7 MB
 ```
 
 Across all runs so far the 10 000-object scene measured 38.9 / 39.4 / 40.0 /

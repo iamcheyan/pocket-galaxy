@@ -49,6 +49,11 @@ It is small on purpose — the loop stays active, the idle layer only softens it
 | Nebula | 35–80 | Science | Largest visual body |
 | Ancient Ruins | 45–100 | Science + Mineral | Core-skewed |
 
+Every body also carries a unique four-character **catalog** code (`AX-CY`). Only
+128 display names exist, so a 2 400-body galaxy repeats each name about 19 times;
+the catalog is what makes a specific body addressable. It is generated per galaxy,
+unique within it, and stable for a seed.
+
 Generation places bodies on three spiral arms with jitter, using `progress^0.62`
 so the core is dense. Kind weights shift outward: asteroids and black holes get
 more common in the outer arms, stars and ruins less common. Everything derives
@@ -145,6 +150,15 @@ average FPS, achievements. Shown in Logbook; the same `Stats` object is saved.
 
 ## Pause, save, restart
 
+- **Failure handling**: if the quota is genuinely exhausted, the save reports
+  `quota · <bytes>` (not `unavailable`), the *previous* save is left intact, and
+  play continues. The browser suite forces this with a Massive galaxy under a
+  filled localStorage.
+- **Save size** (measured, envelope with settings): Small 19.9 KB · Medium 56.2 KB
+  · Large 133.1 KB · Huge 257.2 KB · Massive ~515 KB (re-measured on the current
+  build: 514.7–514.9 KB depending on discovered flags). A Massive galaxy is the
+  one case where a 5 MB localStorage quota is worth watching; the IndexedDB
+  mirror is the fallback, and quota exhaustion is handled explicitly.
 - **Pause**: START / P or the Settings button. Halts idle income, risk rolls and
   particle motion; the map keeps rendering so the overlay still measures.
 - **Save**: automatic (debounced 600 ms after any change, plus 1 Hz idle income

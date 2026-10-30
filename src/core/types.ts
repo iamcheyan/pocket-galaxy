@@ -31,7 +31,10 @@ export interface Body {
   /** Visual radius in logical pixels at zoom 1. */
   size: number;
   seed: number;
+  /** Human-readable name; not unique — see `catalog`. */
   name: string;
+  /** Stable, unique per galaxy (e.g. "KX-1187"). */
+  catalog: string;
   scanned: boolean;
   discovered: boolean;
   /** Remaining harvest units. */

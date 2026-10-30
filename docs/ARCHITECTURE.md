@@ -19,7 +19,7 @@ flowchart TD
 Two rules keep this tractable:
 
 1. **`src/core/*` never touches the DOM, `window`, or timers.** Every rule is
-   pure: state in, new state out. That is why 73 unit tests run in Node in under
+   pure: state in, new state out. That is why 76 unit tests run in Node in under
    a second and exercise the exact functions the UI calls.
 2. **One render loop.** Only the galaxy screen paints the map, from one
    `requestAnimationFrame` loop. DOM is updated on a 4 Hz budget and only when a
@@ -139,7 +139,10 @@ GameState + Settings
 ```
 
 `decodeSave()` validates schema, version ceiling, galaxy array, non-negative
-finite resources, and hull in `0..100`. The store keeps an immutable
+finite resources, and hull in `0..100`, then runs `migrateState()` for known
+older versions. The one implemented migration (v3 → v4) adds unique catalog codes
+to bodies saved before they existed; anything that would require guessing a value
+is rejected instead of invented. The store keeps an immutable
 `sessionOrigin` (`new game` / `loaded` / `mirror`) alongside the mutable save
 status, because autosave overwrites the status within a second and a restored
 session would otherwise be indistinguishable from a fresh one. A corrupt envelope returns `null` and the

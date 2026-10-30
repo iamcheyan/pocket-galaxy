@@ -13,6 +13,7 @@ host; no handheld, e-ink reader or tablet hardware was attached.
 | Real save write + read, survives reload | ✅ | gameplay: `save: localStorage envelope exists`, `reload restores the large galaxy` |
 | Real save write + read, IndexedDB mirror | ✅ | gameplay: `save: IndexedDB mirror written` |
 | Corrupt save rejected, not half-loaded | ✅ | gameplay: `corrupt envelope is rejected and a fresh game starts`; `tests/unit/save.test.ts` |
+| Quota exhaustion reported, old save preserved, play continues | ✅ | gameplay: `oversized envelope under full storage reports quota`; unit: `a full storage reports quota, not unavailable` |
 | Pause | ✅ | gameplay: `P pauses`; `tests/unit/game.test.ts` idle/risk pause guards |
 | Restart | ✅ | gameplay: `restart wipes progress back to a fresh medium galaxy` |
 | Seven body kinds | ✅ | `tests/unit/galaxy.test.ts` — all seven appear in a medium galaxy |
@@ -96,7 +97,7 @@ swapped `navigator.getGamepads`.
 
 | Requirement | Status | Evidence |
 |---|---|---|
-| Unit tests: resources / upgrades / saves | ✅ | 73 tests, `node --test tests/unit/` |
+| Unit tests: resources / upgrades / saves | ✅ | 76 tests, `node --test tests/unit/` |
 | Interaction tests | ✅ | 5 suites, real Chromium (`responsive`, `themes`, `inputs`, `gameplay`, `performance`) |
 | `docs/ARCHITECTURE.md` | ✅ | present |
 | `docs/GAMEPLAY.md` | ✅ | present |

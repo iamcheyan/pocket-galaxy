@@ -31,7 +31,7 @@ Nothing is fetched at runtime: no CDN, no fonts, no telemetry. It works from
 ```sh
 npm run check              # tsc --noEmit (strict) + native-control guard
 npm run check:assets       # ?v= cache-buster matches the built fingerprint
-npm test                   # 73 unit tests (node --test)
+npm test                   # 76 unit tests (node --test)
 npm run test:interaction   # real Chromium: responsive, themes, inputs, gameplay, performance
 npm run evidence           # regenerates every screenshot in docs/evidence/
 npm run verify             # check + unit + build + cache-bust + interaction

@@ -294,6 +294,64 @@ try {
   const restarted = await state(page);
   check('restart: wipes progress back to a fresh medium galaxy', restarted.bodies === 260 && restarted.discovered === 0, JSON.stringify(restarted));
 
+  /* -------------------- quota exhaustion is reported --------------------- */
+
+  const quota = await page.evaluate(async () => {
+    const store = window.__pocketGalaxy.store;
+    // Fill localStorage, then expand to Massive: a 515 KB envelope can no longer
+    // fit, which is the realistic failure a handheld hits.
+    let index = 0;
+    let chunk = 4096;
+    for (;;) {
+      try {
+        localStorage.setItem(`filler-${index}`, 'x'.repeat(chunk));
+        index += 1;
+      } catch {
+        if (chunk <= 4) break;
+        chunk = Math.floor(chunk / 2);
+      }
+      if (index > 50000) break;
+    }
+    // Record what the previous save held before the failing write.
+    const before = JSON.parse(localStorage.getItem('pocket-galaxy.save.v3') ?? 'null');
+    store.expand('massive');
+    await new Promise((resolve) => setTimeout(resolve, 250));
+    store.persist('massive under pressure');
+    await new Promise((resolve) => setTimeout(resolve, 250));
+    const status = store.state.saveStatus;
+    const after = JSON.parse(localStorage.getItem('pocket-galaxy.save.v3') ?? 'null');
+    const live = store.state.game.galaxy.scale;
+    // The suite is on Settings here, so prove the app is still live by reading
+    // the mounted screen and by driving a real interaction after the failure.
+    const screen = document.querySelector('[data-testid^="screen-"]')?.getAttribute('data-testid') ?? '';
+    const buttons = document.querySelectorAll('button[data-focusable]').length;
+    for (let key = 0; key < index; key++) localStorage.removeItem(`filler-${key}`);
+    return {
+      status,
+      previousScale: before?.state?.galaxy?.scale,
+      afterScale: after?.state?.galaxy?.scale,
+      live,
+      screen,
+      buttons,
+      bodies: store.state.game.galaxy.bodies.length,
+    };
+  });
+  check(
+    'save: an oversized envelope under full storage reports quota',
+    quota.status.startsWith('quota'),
+    JSON.stringify(quota),
+  );
+  check(
+    'save: the previous save survives a failed write',
+    quota.previousScale !== undefined && quota.afterScale === quota.previousScale,
+    `before=${quota.previousScale} after=${quota.afterScale}`,
+  );
+  check(
+    'save: the game keeps running after a failed write',
+    quota.screen !== '' && quota.buttons > 0 && quota.live === 'massive' && quota.bodies === 2400,
+    JSON.stringify(quota),
+  );
+
   check('gameplay run: console clean', consoleErrors.length === 0, consoleErrors.join(' | '));
   check('gameplay run: no page errors', pageErrors.length === 0, pageErrors.join(' | '));
 

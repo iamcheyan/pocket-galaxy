@@ -3,6 +3,7 @@
 // harness can run without a browser storage global.
 
 import { SAVE_VERSION } from './game.ts';
+import { catalogCode } from './galaxy.ts';
 import type { GameState, SaveEnvelope, Settings } from './types.ts';
 
 export const SAVE_KEY = 'pocket-galaxy.save.v3';
@@ -44,19 +45,29 @@ export function defaultSettings(): Settings {
   };
 }
 
-function browserStorage(): StorageLike | null {
+/**
+ * Resolves localStorage, distinguishing "there is no storage" from "storage is
+ * full". The old write-probe conflated the two: once the quota filled, the probe
+ * itself threw and every subsequent save reported `unavailable`, silently
+ * hiding a quota problem that the player needs to know about.
+ */
+function browserStorage(): { storage: StorageLike | null; blockedWrite: boolean } {
+  let candidate: Storage | undefined;
   try {
-    // Absent in Node/benchmark runs and in locked-down embedders, so the guard
-    // is runtime behaviour, not defensive noise.
-    const candidate: Storage | undefined = globalThis.localStorage;
-    if (!candidate) return null;
-    // Probe: private-mode browsers throw on write.
+    candidate = globalThis.localStorage;
+  } catch {
+    // Access itself throws when storage is blocked by policy.
+    return { storage: null, blockedWrite: false };
+  }
+  if (!candidate) return { storage: null, blockedWrite: false };
+  try {
     const probe = '__pocket_galaxy_probe__';
     candidate.setItem(probe, '1');
     candidate.removeItem(probe);
-    return candidate;
+    return { storage: candidate, blockedWrite: false };
   } catch {
-    return null;
+    // Present and readable, but at capacity (or write-blocked in private mode).
+    return { storage: candidate, blockedWrite: true };
   }
 }
 
@@ -98,7 +109,30 @@ export function decodeSave(raw: string): SaveEnvelope | null {
   }
   if (!isFiniteNumber(state.hull) || state.hull < 0 || state.hull > 100) return null;
   const settings = { ...defaultSettings(), ...(envelope.settings ?? {}) };
-  return { ...(envelope as SaveEnvelope), settings };
+  const migrated = migrateState(state as GameState, envelope.version ?? SAVE_VERSION);
+  return { ...(envelope as SaveEnvelope), version: SAVE_VERSION, state: migrated, settings };
+}
+
+/**
+ * Upgrades an older envelope to the current schema. Only additive changes are
+ * migrated; anything that would require guessing is rejected by the validator
+ * above instead.
+ */
+function migrateState(state: GameState, version: number): GameState {
+  if (version >= 4) return state;
+  // v4 added unique catalog designations to every body.
+  const used = new Set<string>();
+  const bodies = state.galaxy.bodies.map((body) => {
+    if (body.catalog) {
+      used.add(body.catalog);
+      return body;
+    }
+    let catalog = catalogCode(body.seed);
+    for (let attempt = 1; used.has(catalog); attempt++) catalog = catalogCode(body.seed, attempt);
+    used.add(catalog);
+    return { ...body, catalog };
+  });
+  return { ...state, version: SAVE_VERSION, galaxy: { ...state.galaxy, bodies } };
 }
 
 export type SaveStatus = 'saved' | 'quota' | 'unavailable';
@@ -111,13 +145,13 @@ export interface SaveOutcome {
 
 export function writeSave(state: GameState, settings: Settings): SaveOutcome {
   const payload = encodeSave(state, settings);
-  const storage = browserStorage();
+  const { storage } = browserStorage();
   if (!storage) return { status: 'unavailable', bytes: 0, at: Date.now() };
   try {
     storage.setItem(SAVE_KEY, payload);
     return { status: 'saved', bytes: payload.length, at: Date.now() };
   } catch {
-    // Quota: drop the history mirror first, then retry once.
+    // Out of space: sacrifice the history mirror, then retry.
     try {
       storage.removeItem(HISTORY_KEY);
       storage.setItem(SAVE_KEY, payload);
@@ -129,7 +163,7 @@ export function writeSave(state: GameState, settings: Settings): SaveOutcome {
 }
 
 export function readSave(): SaveEnvelope | null {
-  const storage = browserStorage();
+  const { storage } = browserStorage();
   if (!storage) return null;
   const raw = storage.getItem(SAVE_KEY);
   if (!raw) return null;
@@ -137,12 +171,12 @@ export function readSave(): SaveEnvelope | null {
 }
 
 export function clearSave(): void {
-  const storage = browserStorage();
+  const { storage } = browserStorage();
   storage?.removeItem(SAVE_KEY);
 }
 
 export function readSettings(): Settings {
-  const storage = browserStorage();
+  const { storage } = browserStorage();
   if (!storage) return defaultSettings();
   const raw = storage.getItem(SETTINGS_KEY);
   if (!raw) return defaultSettings();
@@ -155,7 +189,7 @@ export function readSettings(): Settings {
 }
 
 export function writeSettings(settings: Settings): boolean {
-  const storage = browserStorage();
+  const { storage } = browserStorage();
   if (!storage) return false;
   try {
     storage.setItem(SETTINGS_KEY, JSON.stringify(settings));
@@ -173,7 +207,7 @@ export interface HistoryEntry {
 }
 
 export function readHistory(): HistoryEntry[] {
-  const storage = browserStorage();
+  const { storage } = browserStorage();
   if (!storage) return [];
   try {
     const parsed = JSON.parse(storage.getItem(HISTORY_KEY) ?? '[]') as HistoryEntry[];
@@ -184,7 +218,7 @@ export function readHistory(): HistoryEntry[] {
 }
 
 export function appendHistory(entry: HistoryEntry): void {
-  const storage = browserStorage();
+  const { storage } = browserStorage();
   if (!storage) return;
   const history = [...readHistory(), entry].slice(-20);
   try {

@@ -46,6 +46,22 @@ test('every body stays inside the unit disc and keeps a positive deposit', () =>
   }
 });
 
+test('catalog designations are unique even when names repeat', () => {
+  // 128 possible names vs 2 400 bodies guarantees name collisions; the catalog
+  // is what keeps bodies individually addressable.
+  for (const scale of ['small', 'medium', 'massive'] as const) {
+    const galaxy = generateGalaxy(scale, 4242);
+    const catalogs = new Set(galaxy.bodies.map((body) => body.catalog));
+    assert.equal(catalogs.size, galaxy.bodies.length, `${scale}: duplicate catalog`);
+    for (const body of galaxy.bodies) {
+      assert.match(body.catalog, /^[A-Z2-9]{2}-[A-Z2-9]{2}$/, body.catalog);
+    }
+  }
+  const massive = generateGalaxy('massive', 4242);
+  const names = new Set(massive.bodies.map((body) => body.name));
+  assert.ok(names.size < massive.bodies.length, 'expected display names to repeat');
+});
+
 test('all seven body kinds appear in a medium galaxy', () => {
   const kinds = new Set(generateGalaxy('medium', 5).bodies.map((body) => body.kind));
   for (const kind of ['star', 'planet', 'asteroid', 'comet', 'blackhole', 'nebula', 'ruins']) {

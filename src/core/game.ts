@@ -24,7 +24,7 @@ import type {
   UpgradeId,
 } from './types.ts';
 
-export const SAVE_VERSION = 3;
+export const SAVE_VERSION = 4;
 
 /** Which resources each body kind yields, by weight. */
 export const YIELDS: Record<BodyKind, Partial<Record<ResourceKind, number>>> = {
