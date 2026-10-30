@@ -70,8 +70,8 @@ swapped `navigator.getGamepads`.
 | Handheld layout | ✅ desktop-simulated | `layout-handheld-390x844-galaxy.png`, `page-galaxy-handheld.png` |
 | Tablet layout | ✅ desktop-simulated | `layout-tablet-820x1180-galaxy.png` |
 | Desktop layout | ✅ | `theme-dark-desktop-galaxy.png` |
-| E-Ink layout | ✅ desktop-simulated | `layout-eink-390x844-galaxy.png`, `layout-eink-1280x800-galaxy.png` |
-| E-Ink monochrome render | ✅ | `qualityBudget(…, eink).monochrome` → bodies painted from `--fg` in grayscale; asserted in `tests/unit/device.test.ts` and visible in `layout-eink-*.png` |
+| E-Ink layout | ✅ desktop-simulated | `layout-eink-390x844-galaxy.png`, `layout-eink-1280x800-galaxy.png`; profile pinning verified in `themes.mjs` |
+| E-Ink monochrome render | ✅ | `qualityBudget(…, eink).monochrome` → bodies painted from `--fg`; `themes.mjs` requires **zero** saturated pixels in the e-ink canvas while still producing ink |
 | E-Ink motion/glow suppression | ✅ | 0 particles, no glow/trails/vignette, 66 ms target; CSS kills transitions, shadows, rounding |
 | No hard-coded device names | ✅ | `src/core/device.ts` reads capabilities only; grep for device names returns nothing in `src/` |
 | Responsive without hard-coded sizes | ✅ | `responsive.mjs`: 12 page/viewport pairs, zero overflow |

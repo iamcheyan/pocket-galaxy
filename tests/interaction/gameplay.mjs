@@ -87,16 +87,31 @@ try {
   }
   const afterMany = await state(page);
   check('gameplay: harvesting multiple bodies accumulates progress', afterMany.harvested >= 5, `${afterMany.harvested}`);
+  // Deterministic: drain one visible body through the real harvest action, then
+  // confirm the UI refuses to harvest it again. Relying on leftovers from the
+  // loop above made this pass or fail depending on starting deposits.
+  const exhausted = await page.evaluate(async () => {
+    const store = window.__pocketGalaxy.store;
+    const target = store.visibleBodies().find((body) => body.deposit > 0);
+    if (!target) return { ok: false, reason: 'no body' };
+    for (let attempt = 0; attempt < 20; attempt++) {
+      const before = store.state.game.galaxy.bodies[target.id].deposit;
+      store.harvestBody(target.id);
+      if (before === 0) break;
+    }
+    const drained = store.state.game.galaxy.bodies[target.id].deposit === 0;
+    store.selectBody(target.id);
+    store.emit();
+    await new Promise((resolve) => setTimeout(resolve, 120));
+    return {
+      drained,
+      disabled: document.querySelector('[data-testid="harvest-btn"]')?.hasAttribute('disabled') ?? false,
+    };
+  });
   check(
     'gameplay: an exhausted deposit disables the Harvest button',
-    await page.evaluate(() => {
-      const store = window.__pocketGalaxy.store;
-      const drained = store.state.game.galaxy.bodies.find((body) => body.deposit === 0);
-      if (!drained) return false;
-      store.selectBody(drained.id);
-      store.emit();
-      return document.querySelector('[data-testid="harvest-btn"]')?.hasAttribute('disabled') ?? false;
-    }),
+    exhausted.drained && exhausted.disabled,
+    JSON.stringify(exhausted),
   );
 
   /* ----------------------------- scan action ----------------------------- */
