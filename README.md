@@ -79,6 +79,19 @@ Settings, Shipyard and Benchmark are fully operable with a D-pad alone.
 - [ACCEPTANCE](docs/ACCEPTANCE.md) — the checkable acceptance matrix
 - [EVIDENCE](docs/EVIDENCE.md) — every screenshot with its assertions and hash
 
+## Screenshot index
+
+| | |
+|---|---|
+| Themes | `docs/evidence/theme-{dark,light,oled}-desktop-galaxy.png` |
+| Layouts | `layout-handheld-390x844`, `layout-tablet-820x1180`, `layout-eink-390x844`, `layout-eink-1280x800` |
+| Pages | `page-{galaxy,shipyard,benchmark,showcase,logbook,settings}-*` |
+| Performance | `perf-overlay-desktop.png`, `benchmark-desktop.png`, `quality-{low,high}-desktop.png`, `benchmark-report.txt` |
+| Input | `input-{keyboard,gamepad}-debug.png`, plus touch/mouse shots under `tests/interaction/.artifacts/` |
+| Loop | `loop-{1-before-expand,2-expand-confirm,3-after-expand}.png` |
+
+Full table with per-capture assertions and SHA-256 prefixes: [docs/EVIDENCE.md](docs/EVIDENCE.md).
+
 ## Scope honesty
 
 Everything here runs in Chromium on the HX90 development host. Handheld, e-ink
