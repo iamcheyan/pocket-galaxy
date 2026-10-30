@@ -125,6 +125,8 @@ export type QualityLevel = 'high' | 'medium' | 'low';
 
 export interface QualityBudget {
   level: QualityLevel;
+  /** E-ink renders in grayscale with high-contrast ink, never colour. */
+  monochrome: boolean;
   particles: number;
   starfield: number;
   trails: boolean;
@@ -140,6 +142,7 @@ export function qualityBudget(level: QualityLevel, eink: boolean): QualityBudget
   if (eink) {
     return {
       level,
+      monochrome: true,
       particles: 0,
       starfield: 40,
       trails: false,
@@ -153,6 +156,7 @@ export function qualityBudget(level: QualityLevel, eink: boolean): QualityBudget
   if (level === 'low') {
     return {
       level,
+      monochrome: false,
       particles: 90,
       starfield: 120,
       trails: false,
@@ -166,6 +170,7 @@ export function qualityBudget(level: QualityLevel, eink: boolean): QualityBudget
   if (level === 'medium') {
     return {
       level,
+      monochrome: false,
       particles: 320,
       starfield: 260,
       trails: true,
@@ -178,6 +183,7 @@ export function qualityBudget(level: QualityLevel, eink: boolean): QualityBudget
   }
   return {
     level,
+    monochrome: false,
     particles: 900,
     starfield: 420,
     trails: true,

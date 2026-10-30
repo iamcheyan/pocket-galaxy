@@ -58,36 +58,36 @@ Same machine, same session, back-to-back (headless Chromium 152, 1280×800 @1x,
 | 1 000 | 108 | 60.0 | 108 | 60.0 |
 | 3 000 | 108 | 60.0 | 108 | 60.0 |
 | 5 000 | 108 | 60.0 | 108 | 60.0 |
-| 10 000 | 72 | 40.0 | 67 | 37.2 |
+| 10 000 | 71 | 39.4 | 72 | 40.0 |
 
-Run 1: Galaxy Score **9 760**, rating **A+**, max stable 10 000.
-Run 2: Galaxy Score **9 482**, rating **A+**, max stable 10 000.
+Run 1: Galaxy Score **9 705**, rating **A+**, max stable 10 000.
+Run 2: Galaxy Score **9 760**, rating **A+**, max stable 10 000.
 
-The two runs differ on the heaviest scene (40.0 vs 37.2 FPS) — that is the point
-of running it twice: the harness reports what happened, including variance, not a
-smoothed story.
+The two runs differ on the heaviest scene (39.4 vs 40.0 FPS, different frame
+counts) — that is the point of running it twice: the harness reports what
+happened, including variance, not a smoothed story.
 
 Current captured report (`docs/evidence/benchmark-report.txt`, from
 `npm run evidence`):
 
 ```text
 objects  frames  avgFps  minFps  p95ms   score
-    100     108    60.0    59.5   16.80      60
+    100     109    60.0    59.5   16.70      60
     500     108    60.0    59.5   16.70     300
    1000     108    60.0    59.5   16.80     600
    3000     108    60.0    59.5   16.80    1800
-   5000     102    56.7    29.9   33.30    2833
-  10000      40    21.8    15.0   66.70    2182
+   5000      95    52.8    29.9   33.40    2639
+  10000      54    30.0    20.0   50.00    3000
 
-Galaxy Score: 7775
+Galaxy Score: 8399
 Device Rating: A
-Max Stable Objects: 5000
-Average FPS: 56.8
-Peak Memory: 4.5 MB
+Max Stable Objects: 10000
+Average FPS: 56
+Peak Memory: 5.2 MB
 ```
 
-Across all runs so far the 10 000-object scene measured 40.0 / 37.2 / 38.5 /
-31.9 / 21.8 FPS. A headless software rasteriser on a loaded host is not a stable
+Across all runs so far the 10 000-object scene measured 39.4 / 40.0 / 37.2 /
+38.5 / 31.9 / 21.8 FPS. A headless software rasteriser on a loaded host is not a stable
 platform, and pretending otherwise would be the dishonest option. What the
 numbers *do* prove: the 60 FPS ceiling holds through 5 000 objects, and 10 000
 objects is where this particular software-rendered environment starts to
@@ -109,8 +109,13 @@ climbing slowly prevents flap. Isolated slow frames never change the level.
 
 ### Budgets
 
+E-Ink is selected when the resolved layout is `eink` **or** the OS advertises
+`monochrome` / `update: slow`. A pinned E-Ink layout on a colour desktop therefore
+still renders monochrome, which is what makes the profile testable off-device.
+
 | | High | Medium | Low | E-Ink |
 |---|---:|---:|---:|---:|
+| Monochrome | no | no | no | **yes** |
 | Particles | 900 | 320 | 90 | 0 |
 | Starfield | 420 | 260 | 120 | 40 |
 | Trails | on | on | off | off |

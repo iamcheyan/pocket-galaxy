@@ -192,6 +192,26 @@ button {
 
 .nav-spacer { flex: 1 1 auto; }
 
+/* Compact nav (handheld / e-ink): the six page buttons plus a score chip must
+   fit 390 px without horizontal scrolling, because a D-pad user cannot scroll
+   an overflow nav they cannot focus. */
+[data-layout='handheld'] .nav,
+[data-layout='eink'] .nav {
+  gap: 3px;
+  padding: 0 8px;
+  overflow-x: visible;
+}
+[data-layout='handheld'] .nav-brand,
+[data-layout='eink'] .nav-brand { display: none; }
+[data-layout='handheld'] .nav-item,
+[data-layout='eink'] .nav-item {
+  padding: 0 7px;
+  font-size: 12px;
+  min-height: 32px;
+}
+[data-layout='handheld'] .nav-chip,
+[data-layout='eink'] .nav-chip { padding: 0 6px; font-size: 10px; }
+
 /* ---------------------------------- focus --------------------------------- */
 
 [data-focusable] { position: relative; outline: none; }

@@ -124,6 +124,7 @@ export class Store {
     const game = saved?.state ?? createNewGame('medium', Math.floor(Math.random() * 0xffffffff), NOW());
     const layout = resolveLayout(settings.layout, caps);
     const manual = settings.quality === 'auto' ? null : settings.quality;
+    const einkActive = layout.id === 'eink' || caps.eink;
     this.state = {
       page: 'galaxy',
       game,
@@ -139,7 +140,7 @@ export class Store {
       sessionOrigin: saved ? 'loaded' : 'new game',
       caps,
       layout,
-      budget: qualityBudget(manual ?? 'high', caps.eink),
+      budget: qualityBudget(manual ?? 'high', einkActive),
       adaptiveLevel: manual ?? 'high',
       manualQuality: manual,
       perfVisible: settings.showPerf,
@@ -157,6 +158,19 @@ export class Store {
       this.state.layout = resolveLayout(settings.layout, caps);
     }
     if (!saved) this.persist('new game');
+  }
+
+  /** E-Ink is active when the resolved layout says so or the OS hints it. */
+  einkActive(): boolean {
+    return this.state.layout.id === 'eink' || this.state.caps.eink;
+  }
+
+  private rebuildBudget(): void {
+    const budget = qualityBudget(this.state.adaptiveLevel, this.einkActive());
+    this.state.budget = this.state.settings.particles ? budget : { ...budget, particles: 0 };
+    if (this.state.particles.length > this.state.budget.particles) {
+      this.state.particles = this.state.particles.slice(0, this.state.budget.particles);
+    }
   }
 
   subscribe(listener: Listener): () => void {
@@ -308,10 +322,7 @@ export class Store {
       const level = this.adaptive.sample(sample.avgFrameMs);
       if (level !== this.state.adaptiveLevel) {
         this.state.adaptiveLevel = level;
-        this.state.budget = qualityBudget(level, this.state.caps.eink);
-        if (this.state.settings.particles === false) {
-          this.state.budget = { ...this.state.budget, particles: 0 };
-        }
+        this.rebuildBudget();
         this.toast(
           level === 'low'
             ? 'Adaptive quality: low (frame time > 40 ms)'
@@ -441,11 +452,10 @@ export class Store {
       this.state.manualQuality = patch.quality === 'auto' ? null : patch.quality;
       this.state.adaptiveLevel = this.state.manualQuality ?? this.state.adaptiveLevel;
       if (this.state.manualQuality) this.adaptive.override(this.state.manualQuality);
-      this.state.budget = qualityBudget(this.state.adaptiveLevel, this.state.caps.eink);
     }
-    if (patch.particles !== undefined) {
-      this.state.budget = { ...this.state.budget, particles: patch.particles ? qualityBudget(this.state.adaptiveLevel, this.state.caps.eink).particles : 0 };
-    }
+    // Layout can change e-ink status, and quality/particles change the numbers,
+    // so the budget is always rebuilt from the current state.
+    this.rebuildBudget();
     if (patch.showPerf !== undefined) this.state.perfVisible = patch.showPerf;
     if (patch.gamepadMap) this.state.settings = { ...this.state.settings, gamepadMap: patch.gamepadMap };
     this.applyDocumentFlags();
@@ -459,12 +469,8 @@ export class Store {
       this.adaptive.override(level);
       this.state.adaptiveLevel = level;
     }
-    this.state.budget = qualityBudget(this.state.adaptiveLevel, this.state.caps.eink);
-    if (this.state.settings.particles === false) {
-      this.state.budget = { ...this.state.budget, particles: 0 };
-    }
-    this.state.particles = this.state.particles.slice(0, this.state.budget.particles);
     this.state.settings = { ...this.state.settings, quality: level ?? 'auto' };
+    this.rebuildBudget();
     writeSettings(this.state.settings);
     this.toast(`Quality ${level ?? `auto (${this.state.adaptiveLevel})`} · ${trigger}`, 'info');
     this.emit();
@@ -486,6 +492,7 @@ export class Store {
     );
     this.state.caps = caps;
     this.state.layout = resolveLayout(this.state.settings.layout, caps);
+    this.rebuildBudget();
     this.applyDocumentFlags();
     this.emit();
   }
@@ -495,11 +502,14 @@ export class Store {
   toast(text: string, tone: Toast['tone'] = 'info'): void {
     this.toastSeq += 1;
     const toast: Toast = { id: this.toastSeq, text, tone, at: NOW() };
-    this.state.toasts = [...this.state.toasts.slice(-3), toast];
+    // Two at a time: on a 390x844 handheld a taller stack covers the target
+    // panel, and duplicates (e.g. "scanner upgraded" spam) are collapsed.
+    const deduped = this.state.toasts.filter((entry) => entry.text !== toast.text);
+    this.state.toasts = [...deduped.slice(-1), toast];
     setTimeout(() => {
       this.state.toasts = this.state.toasts.filter((candidate) => candidate.id !== toast.id);
       this.emit();
-    }, 2600);
+    }, 2200);
   }
 
   /**

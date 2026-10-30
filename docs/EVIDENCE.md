@@ -22,9 +22,9 @@ change them.
 
 | File | Theme | Layout | Viewport | SHA-256 (12) |
 |---|---|---|---|---|
-| `theme-dark-desktop-galaxy.png` | dark | desktop | 1280×800 | `6d26a37c0293` |
-| `theme-light-desktop-galaxy.png` | light | desktop | 1280×800 | `736c2fec5a49` |
-| `theme-oled-desktop-galaxy.png` | oled | desktop | 1280×800 | `7459daaf1816` |
+| `theme-dark-desktop-galaxy.png` | dark | desktop | 1280×800 | `1503012d531c` |
+| `theme-light-desktop-galaxy.png` | light | desktop | 1280×800 | `ed17b84d1bc0` |
+| `theme-oled-desktop-galaxy.png` | oled | desktop | 1280×800 | `f8c94a89d0dc` |
 
 OLED is verified programmatically, not by eye: the capture asserts
 `document.documentElement.dataset.theme === 'oled'`, and the canvas palette is
@@ -35,10 +35,10 @@ re-read from the same tokens (`--bg-deep: #000000`), so the map background is
 
 | File | Theme | Layout | Viewport | SHA-256 (12) |
 |---|---|---|---|---|
-| `layout-handheld-390x844-galaxy.png` | dark | handheld (auto-resolved) | 390×844 | `632e6650ed23` |
-| `layout-tablet-820x1180-galaxy.png` | dark | tablet (pinned) | 820×1180 | `44c74f194776` |
-| `layout-eink-390x844-galaxy.png` | light | eink (pinned) | 390×844 | `7eff88a1df85` |
-| `layout-eink-1280x800-galaxy.png` | light | eink (pinned) | 1280×800 | `b8fd6f1f3b87` |
+| `layout-handheld-390x844-galaxy.png` | dark | handheld (auto-resolved) | 390×844 | `04ccc1df5f9b` |
+| `layout-tablet-820x1180-galaxy.png` | dark | tablet (pinned) | 820×1180 | `54401ca3c8c7` |
+| `layout-eink-390x844-galaxy.png` | light | eink (pinned) | 390×844 | `5fa6876e8675` |
+| `layout-eink-1280x800-galaxy.png` | light | eink (pinned) | 1280×800 | `f9e263e93111` |
 
 The handheld shot is captured with `layout: auto`, so the file proves the
 capability-driven resolver — not a pinned override — chose `handheld` for a
@@ -48,27 +48,27 @@ capability-driven resolver — not a pinned override — chose `handheld` for a
 
 | File | Page | Layout | Viewport | SHA-256 (12) |
 |---|---|---|---|---|
-| `page-galaxy-desktop.png` | Galaxy | desktop | 1280×800 | `8d870dc96e24` |
-| `page-galaxy-handheld.png` | Galaxy | handheld | 390×844 | `1aa12a126a86` |
-| `page-shipyard-desktop.png` | Shipyard | desktop | 1280×800 | `bad30a42e661` |
-| `page-shipyard-handheld.png` | Shipyard | handheld | 390×844 | `f669a83466d1` |
-| `page-benchmark-desktop.png` | Benchmark | desktop | 1280×800 | `e0361238c173` |
-| `page-showcase-desktop.png` | Showcase | desktop | 1280×800 | `3128b4e971a0` |
-| `page-showcase-handheld.png` | Showcase | handheld | 390×844 | `26062a364c67` |
-| `page-logbook-desktop.png` | Logbook | desktop | 1280×800 | `4763fa93bbd7` |
-| `page-settings-desktop.png` | Settings | desktop | 1280×800 | `a428f5a57a2b` |
-| `page-settings-handheld.png` | Settings | handheld | 390×844 | `0b08ee54caa2` |
-| `page-settings-eink.png` | Settings | eink | 1280×800 | `bbfb5976c7d6` |
+| `page-galaxy-desktop.png` | Galaxy | desktop | 1280×800 | `22032d104e76` |
+| `page-galaxy-handheld.png` | Galaxy | handheld | 390×844 | `f8cbc246fe98` |
+| `page-shipyard-desktop.png` | Shipyard | desktop | 1280×800 | `729d7bcee522` |
+| `page-shipyard-handheld.png` | Shipyard | handheld | 390×844 | `cdaafc970d13` |
+| `page-benchmark-desktop.png` | Benchmark | desktop | 1280×800 | `4ef5e7184088` |
+| `page-showcase-desktop.png` | Showcase | desktop | 1280×800 | `ff6c0d6ff21e` |
+| `page-showcase-handheld.png` | Showcase | handheld | 390×844 | `28286c7bfe37` |
+| `page-logbook-desktop.png` | Logbook | desktop | 1280×800 | `939f6b18753a` |
+| `page-settings-desktop.png` | Settings | desktop | 1280×800 | `00af2419eb59` |
+| `page-settings-handheld.png` | Settings | handheld | 390×844 | `35163988b0dd` |
+| `page-settings-eink.png` | Settings | eink | 1280×800 | `11053064f798` |
 
 ## Performance
 
 | File | What it shows | SHA-256 (12) |
 |---|---|---|
-| `perf-overlay-desktop.png` | Live overlay over the map: FPS, avg, frame, p95, jank, memory, entities, particles, draw calls, update, render, quality. Capture fails if FPS ≤ 0. | `0084ca2cf71a` |
-| `benchmark-desktop.png` | Benchmark page after a completed run, with the six-row results table | `558265150de5` |
+| `perf-overlay-desktop.png` | Live overlay over the map: FPS, avg, frame, p95, jank, memory, entities, particles, draw calls, update, render, quality. Capture fails if FPS ≤ 0. | `f07656d21404` |
+| `benchmark-desktop.png` | Benchmark page after a completed run, with the six-row results table | `e87b9907d264` |
 | `benchmark-report.txt` | The paste-ready report text from that run | — |
-| `quality-low-desktop.png` | Forced low: 90-particle budget, no glow, no trails | `63224f8da45f` |
-| `quality-high-desktop.png` | Forced high: 900-particle budget, glow + trails | `29ad5fca9e28` |
+| `quality-low-desktop.png` | Forced low: 90-particle budget, no glow, no trails | `f480bd4f6a58` |
+| `quality-high-desktop.png` | Forced high: 900-particle budget, glow + trails | `e6b3232ab067` |
 
 `quality-low` / `quality-high` are the visible proof that the adaptive system is
 not cosmetic — same scene, same seed, different budgets, visibly different
@@ -78,8 +78,8 @@ particle density and glow.
 
 | File | What it shows | SHA-256 (12) |
 |---|---|---|
-| `input-keyboard-debug.png` | Settings → Input probe after ArrowRight/Left/Up/Down/`=`/`-`: six `[keyboard]` entries | `832698156be1` |
-| `input-gamepad-debug.png` | Same panel after six injected pad buttons (D-pad, A, R1): `[gamepad]` entries naming the button and pad id | `01911b05893b` |
+| `input-keyboard-debug.png` | Settings → Input probe after ArrowRight/Left/Up/Down/`=`/`-`: six `[keyboard]` entries | `ba9b0d796710` |
+| `input-gamepad-debug.png` | Same panel after six injected pad buttons (D-pad, A, R1): `[gamepad]` entries naming the button and pad id | `221a64ae1960` |
 
 Touch and mouse evidence is in video-free form under
 `tests/interaction/.artifacts/` (regenerated by `npm run test:interaction`):
@@ -98,9 +98,9 @@ line per assertion (`ok touch: pinch zooms the map`, etc.).
 
 | File | Stage | SHA-256 (12) |
 |---|---|---|
-| `loop-1-before-expand.png` | Medium galaxy after 14 discoveries, 3 upgrades, resources gathered | `723127871844` |
-| `loop-2-expand-confirm.png` | Self-drawn confirmation modal for expanding to Huge | `47f6c4bf6de6` |
-| `loop-3-after-expand.png` | Huge galaxy (1 200 bodies) with the ship intact | `69940a061f44` |
+| `loop-1-before-expand.png` | Medium galaxy after 14 discoveries, 3 upgrades, resources gathered | `61c984d5189f` |
+| `loop-2-expand-confirm.png` | Self-drawn confirmation modal for expanding to Huge | `e9fa955f4c47` |
+| `loop-3-after-expand.png` | Huge galaxy (1 200 bodies) with the ship intact | `9000a1d72c24` |
 
 Capture asserts `scale === 'huge'` after the modal is confirmed, and the gameplay
 suite additionally asserts that upgrades survive the expansion and that a page

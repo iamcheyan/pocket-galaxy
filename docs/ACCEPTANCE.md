@@ -68,7 +68,8 @@ swapped `navigator.getGamepads`.
 | Tablet layout | ✅ desktop-simulated | `layout-tablet-820x1180-galaxy.png` |
 | Desktop layout | ✅ | `theme-dark-desktop-galaxy.png` |
 | E-Ink layout | ✅ desktop-simulated | `layout-eink-390x844-galaxy.png`, `layout-eink-1280x800-galaxy.png` |
-| E-Ink motion/glow suppression | ✅ | `qualityBudget(…, eink)` → 0 particles, no glow/trails, 66 ms target; CSS kills transitions |
+| E-Ink monochrome render | ✅ | `qualityBudget(…, eink).monochrome` → bodies painted from `--fg` in grayscale; asserted in `tests/unit/device.test.ts` and visible in `layout-eink-*.png` |
+| E-Ink motion/glow suppression | ✅ | 0 particles, no glow/trails/vignette, 66 ms target; CSS kills transitions, shadows, rounding |
 | No hard-coded device names | ✅ | `src/core/device.ts` reads capabilities only; grep for device names returns nothing in `src/` |
 | Responsive without hard-coded sizes | ✅ | `responsive.mjs`: 12 page/viewport pairs, zero overflow |
 

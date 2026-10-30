@@ -14,13 +14,15 @@ import { buildModal, buildToasts, buildContextMenu } from './ui/widgets.ts';
 import { UPGRADES, upgradeCost, canAfford } from './core/upgrades.ts';
 import type { Body } from './core/types.ts';
 
-const PAGES: Array<{ id: PageId; label: string; key: string }> = [
-  { id: 'galaxy', label: 'Galaxy', key: '1' },
-  { id: 'ship', label: 'Shipyard', key: '2' },
-  { id: 'benchmark', label: 'Benchmark', key: '3' },
-  { id: 'showcase', label: 'Showcase', key: '4' },
-  { id: 'achievements', label: 'Logbook', key: '5' },
-  { id: 'settings', label: 'Settings', key: '6' },
+// `short` is used on handheld/e-ink, where six full labels do not fit in a
+// scrollable-without-pointer nav bar.
+const PAGES: Array<{ id: PageId; label: string; short: string; key: string }> = [
+  { id: 'galaxy', label: 'Galaxy', short: 'Map', key: '1' },
+  { id: 'ship', label: 'Shipyard', short: 'Ship', key: '2' },
+  { id: 'benchmark', label: 'Benchmark', short: 'Bench', key: '3' },
+  { id: 'showcase', label: 'Showcase', short: 'Show', key: '4' },
+  { id: 'achievements', label: 'Logbook', short: 'Log', key: '5' },
+  { id: 'settings', label: 'Settings', short: 'Set', key: '6' },
 ];
 
 const store = new Store();
@@ -68,9 +70,16 @@ const ensureScreen = (id: PageId): Screen => {
   return created;
 };
 
+const compact = () =>
+  store.state.layout.id === 'handheld' || store.state.layout.id === 'eink';
+
 const buildNav = () => {
   replaceChildren(nav, [
-    el('div', { class: 'nav-brand' }, [el('span', { class: 'dot' }), el('span', { text: 'Pocket Galaxy' })]),
+    el('div', { class: 'nav-brand' }, [
+      el('span', { class: 'dot' }),
+      // The wordmark is the first thing to go on a 390 px bar.
+      el('span', { text: compact() ? 'PG' : 'Pocket Galaxy' }),
+    ]),
     ...PAGES.map((page) =>
       el(
         'button',
@@ -81,12 +90,12 @@ const buildNav = () => {
           'aria-current': active === page.id ? 'page' : null,
           onclick: () => navigate(page.id),
         },
-        [page.label],
+        [compact() ? page.short : page.label],
       ),
     ),
     el('span', { class: 'nav-spacer' }),
     el('span', {
-      class: 'chip mono',
+      class: 'chip mono nav-chip',
       'data-testid': 'nav-score',
       text: `${store.score().label} ${store.score().value}`,
     }),

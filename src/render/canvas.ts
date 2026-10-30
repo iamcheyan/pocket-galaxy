@@ -174,14 +174,14 @@ export class GalaxyRenderer {
 
     for (const body of visible) {
       const screen = this.project(body, camera);
-      const color = KIND_COLOR_FALLBACK[body.kind];
+      const color = budget.monochrome ? palette.fg : KIND_COLOR_FALLBACK[body.kind];
       const reachable = body.scanned || distanceFromCore(body) <= reach;
       const radius = Math.max(1.2, body.size * (camera.zoom * 0.5 + 0.6));
-      const alpha = reachable ? 1 : 0.28;
+      const alpha = reachable ? 1 : 0.35;
 
       ctx.globalAlpha = alpha;
       if (body.kind === 'nebula') {
-        if (budget.level === 'high' && budget.glow) {
+        if (!budget.monochrome && budget.level === 'high' && budget.glow) {
           const gradient = ctx.createRadialGradient(screen.x, screen.y, 0, screen.x, screen.y, radius * 2.4);
           gradient.addColorStop(0, `${color}55`);
           gradient.addColorStop(1, `${color}00`);
@@ -191,7 +191,17 @@ export class GalaxyRenderer {
           ctx.fill();
           drawCalls += 1;
         }
-        ctx.fillStyle = `${color}2e`;
+        // E-Ink: a flat dithered disc reads better than a low-alpha wash that
+        // quantises into a muddy band on a 16-level grayscale panel.
+        ctx.fillStyle = color;
+        ctx.globalAlpha = budget.monochrome ? (reachable ? 0.22 : 0.1) : 1;
+        if (budget.monochrome) {
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.arc(screen.x, screen.y, radius, 0, Math.PI * 2);
+          ctx.stroke();
+        }
         ctx.beginPath();
         ctx.arc(screen.x, screen.y, radius, 0, Math.PI * 2);
         ctx.fill();

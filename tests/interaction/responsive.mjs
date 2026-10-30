@@ -41,6 +41,29 @@ try {
       }
     }
 
+    // Every page must be reachable from the nav without scrolling: a D-pad user
+    // cannot scroll an overflowing nav bar.
+    const nav = await page.evaluate(() => {
+      const bar = document.querySelector('[data-testid="nav"]');
+      const last = [...document.querySelectorAll('[data-testid^="nav-"]')].at(-1);
+      const rect = last?.getBoundingClientRect();
+      return {
+        scrollWidth: bar?.scrollWidth ?? 0,
+        clientWidth: bar?.clientWidth ?? 0,
+        lastRight: Math.round(rect?.right ?? 0),
+        windowWidth: window.innerWidth,
+      };
+    });
+    check(
+      `${viewport.label}: nav fits without horizontal scroll`,
+      nav.scrollWidth <= nav.clientWidth && nav.lastRight <= nav.windowWidth,
+      JSON.stringify(nav),
+    );
+    check(
+      `${viewport.label}: all six nav pages are present`,
+      (await page.evaluate(() => document.querySelectorAll('[data-testid^="nav-"]').length)) === 7,
+    );
+
     // Every interactive control must meet the minimum touch target on the small
     // viewport, and every focusable must be reachable without a pointer.
     if (viewport.width === 390) {

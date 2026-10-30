@@ -87,6 +87,9 @@ test('quality budgets degrade monotonically', () => {
   assert.equal(medium.glow, false);
   assert.equal(low.trails, false);
   assert.equal(ink.particles, 0);
+  assert.equal(ink.monochrome, true, 'e-ink budget must be monochrome');
+  assert.equal(high.monochrome, false);
+  assert.equal(low.monochrome, false);
   assert.equal(ink.glow, false);
   assert.equal(ink.trails, false);
   assert.equal(ink.targetFrameMs, 66);

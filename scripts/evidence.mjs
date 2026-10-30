@@ -53,6 +53,11 @@ async function prepare(page, { viewport, theme, layout, page: pageId, seed = 424
     store.emit();
   });
   await sleep(180);
+  // Toasts from the setup harvests would sit over the captured panel.
+  await page.evaluate(() => {
+    window.__pocketGalaxy.store.state.toasts = [];
+    window.__pocketGalaxy.store.emit();
+  });
   await page.evaluate((id) => window.__pocketGalaxy.navigate(id), pageId);
   await settle(420);
   return page.evaluate(() => ({
@@ -135,6 +140,20 @@ try {
     const { page, consoleErrors, pageErrors } = await openPage(browser, asViewport(entry.viewport));
     await gotoApp(page, BASE, '?page=galaxy');
     const state = await prepare(page, entry);
+    if (entry.page === 'benchmark') {
+      // Capture the page with real results in it, not an empty shell.
+      await page.click('[data-testid="bench-run"]');
+      await page.waitForFunction(
+        () => !document.querySelector('[data-testid="bench-run"]').hasAttribute('disabled'),
+        { timeout: 120000 },
+      );
+      await sleep(300);
+      await page.evaluate(() => {
+        window.__pocketGalaxy.store.state.toasts = [];
+        window.__pocketGalaxy.store.emit();
+      });
+      await sleep(150);
+    }
     const overflow = await page.evaluate(() => {
       const html = document.documentElement;
       return { overflow: html.scrollWidth > html.clientWidth, scrollWidth: html.scrollWidth, clientWidth: html.clientWidth };

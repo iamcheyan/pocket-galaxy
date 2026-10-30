@@ -97,8 +97,11 @@ renderer, the benchmark reports garbage, not a cached score.
 — unless the user pinned a profile in Settings, which wins unconditionally so a
 tablet can be tested on a desktop. No device model name is ever consulted.
 
-`qualityBudget(level, eink)` produces concrete numbers (particles, starfield,
-trails, glow, shadows, rendered-body cap, target frame time, motion scale).
+`qualityBudget(level, eink)` produces concrete numbers (monochrome, particles,
+starfield, trails, glow, shadows, rendered-body cap, target frame time, motion
+scale). `Store.einkActive()` treats a pinned `eink` layout as e-ink just like an
+OS `monochrome` hint, and the budget is rebuilt whenever layout, quality or the
+particle switch changes.
 `AdaptiveQuality` demotes after 45 consecutive frames slower than 40 ms and
 promotes only after 240 consecutive frames faster than 19 ms, which prevents the
 classic flap where a stutter triggers a downgrade, the downgrade runs fast, and
