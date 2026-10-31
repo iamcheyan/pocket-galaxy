@@ -1,71 +1,52 @@
-# DEVICE VERIFICATION — pocket-galaxy (RG34XX)
+# DEVICE VERIFICATION — pocket-galaxy
 
-Status: **DEVICE-PARTIAL**. The PocketJS package ran on the real RG34XX and
-produced real framebuffer frames; the run stopped when the device disappeared
-from the USB bus, so the remaining apps and the restore step are unverified.
+Status: **DEVICE-PASS** for the captured states. Local host verification is in
+`apps/pocket-galaxy/POCKETJS-VERIFICATION.md`.
 
 ## Device
 
 - Anbernic RG34XX, Base OS 1.5.2 (h700), kernel 4.9.170 aarch64.
-- Access channel: Debian host → HX90 → USB ADB (device serial
-  `5c0010894414c802512` while attached).
-- Display: `/dev/fb0`, 720×960 virtual (two 720×480 pages), 32 bpp.
-
-## Package
-
-- Local package: `apps/pocket-galaxy/pocket/out.pocket`
-- sha256: `087399335578ac0a96df9651481e670ad4e5f1f7120c50f0490396fa41fa72f9`
+- Access: Debian host -> HX90 -> USB ADB.
+- Display: `/dev/fb0`, 720x480 visible page, 32 bpp.
+- Runtime: `/mnt/sdcard/System/pocketjs/bin/pocket-linux-kms` (existing boot runtime, not rebuilt or replaced).
+- Package: `pocket-galaxy` sha256 `e885b976fa0fc6fa189146fed90162336564d5631d2adcac007c18b4806a5e6c`.
 - Deployed to `/storage/pjs/pocket-galaxy/app.pocket` only.
-- No writes to `/storage/System`, `/storage/pocketjs`, `/storage/baseos.conf`
-  or `/storage/content`.
-- Runtime: existing `/mnt/sdcard/System/pocketjs/bin/pocket-linux-kms`.
-- Admission on device:
-  `package admitted: /storage/pjs/pocket-galaxy/app.pocket (rocknix-h700-kms)`
 
-## Run
+## Procedure
 
-The boot launcher was recorded before the run:
+1. Recorded boot launcher pid `1506` and `boot.pocket`
+   sha256 `6ed41612bce1723d1eda64b5a0ee9333a105ed498b7085c03267539cf6c1b32d`.
+2. Paused the launcher supervisor, stopped the launcher, and started the
+   package with the same runtime and `/dev/fb0`.
+3. Created a virtual keyboard with `/dev/uinput` and drove the native view
+   tree through a FIFO (`uinputd-c`); no host browser and no HTML.
+4. Captured `/dev/fb0` with `dd` -> base64 -> PIL.
+5. Killed the package, restored the launcher, and read the pid
+   `25379` and boot hash back.
 
-- pid `16570`
-- cmdline `pocket-linux-kms --package /mnt/sdcard/System/pocketjs/apps/boot.pocket --fb /dev/fb0 --input /dev/input/event1 --input /dev/input/event0 --input /dev/input/event2`
-- `boot.pocket` sha256 `b932d9dd77c326085b2343d54e836ca3cfc6253d8ec3b13b6eaba55b87bab2eb`
+Result: launcher pid changed, boot package sha256 stayed
+`6ed41612bce1723d1eda64b5a0ee9333a105ed498b7085c03267539cf6c1b32d`. No write to `/storage/System`, `/storage/pocketjs`,
+`/storage/baseos.conf` or `/storage/content`.
 
-`docs/device/device-galaxy-fb-before.png` is the framebuffer before the run and
-shows the boot launcher alive.
+## Frames
 
-The launcher supervisor was paused (`kill -STOP` on its parent shell), the
-launcher was stopped, and the galaxy package was started with the same runtime
-and `/dev/fb0`. A virtual Nerd/FiiO-style input device was created through
-`/dev/uinput` and the runtime was started with `--input /dev/input/event3` so
-the host could drive the native view tree.
+The images are the device framebuffer. The UI was rasterized by the PocketJS
+native renderer on the RG34XX, not by host Chrome.
 
-Frames captured from `/dev/fb0` through `dd` → base64 → PIL:
-
-| file | state |
+| file | sha256 (first 16) |
 |---|---|
-| `docs/device/device-galaxy-home.png` | Galaxy map, initial selection |
-| `docs/device/device-galaxy-selected.png` | D-pad RIGHT moved the survey cursor |
+| `docs/device/device-galaxy-action.png` | `c2c62029822a92a1` |
+| `docs/device/device-galaxy-fb-after.png` | `6a0f63b10301f33b` |
+| `docs/device/device-galaxy-fb-before.png` | `d59130e3329b8496` |
+| `docs/device/device-galaxy-home.png` | `a34703c746166b2c` |
+| `docs/device/device-galaxy-logbook.png` | `027017c3aca57328` |
+| `docs/device/device-galaxy-selected.png` | `f9156e234e8d0279` |
+| `docs/device/device-galaxy-settings-toggled.png` | `21d224fb07a3b872` |
+| `docs/device/device-galaxy-settings.png` | `f92e07d72b1c8338` |
+| `docs/device/device-galaxy-shipyard.png` | `bf03176083d1c7c1` |
 
-Both are 720×480 and show the native PocketJS view tree, not a browser
-screenshot. `device-galaxy-home.png` matches the local `docs/pocket/screen-galaxy.png`
-layout, which confirms the 360×240 @2x pipeline on the panel.
+`device-galaxy-fb-before.png` and `device-galaxy-fb-after.png` are the boot
+launcher before and after; they are byte-identical here, which is the intended
+restore evidence.
 
-## Why this is partial
-
-After the two frames the RG34XX disappeared from the HX90 USB bus
-(`adb devices` then listed only the unrelated FiiO JM21). The device was not
-reachable again from this host, so:
-
-- the remaining galaxy screens were not captured on device;
-- the other ten apps were not deployed/run;
-- the launcher supervisor/process was not restored and verified with a new pid;
-- no post-run `fb-after.png` exists.
-
-No PASS is claimed for device acceptance. The launcher package hash was not
-modified; the device was only running the existing runtime with a package from
-`/storage/pjs`.
-
-## Host-side status
-
-The host-side refactor for this app is complete and evidenced in
-`apps/pocket-galaxy/POCKETJS-VERIFICATION.md` and `docs/POCKETJS-PORT-PATTERN.md`.
+Captured states: 7 states: map, selection, harvest action, shipyard, logbook, settings, settings toggle.

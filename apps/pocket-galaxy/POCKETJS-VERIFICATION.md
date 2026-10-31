@@ -56,8 +56,8 @@ Compiler tail:
 ```
 
 - Package: `out.pocket`
-- sha256: `087399335578ac0a96df9651481e670ad4e5f1f7120c50f0490396fa41fa72f9`
-- bytes: 2.4 MiB
+- sha256: `e885b976fa0fc6fa189146fed90162336564d5631d2adcac007c18b4806a5e6c`
+- bytes: 2.3 MiB
 
 ## Frames
 

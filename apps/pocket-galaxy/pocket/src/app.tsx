@@ -68,6 +68,7 @@ export default function App() {
 
   onButtonPress(BTN.LTRIGGER, () => { setToast(""); setTab((tab() + 3) % 4); });
   onButtonPress(BTN.RTRIGGER, () => { setToast(""); setTab((tab() + 1) % 4); });
+  onButtonPress(BTN.START, () => { setToast(""); setTab((tab() + 1) % 4); });
   onButtonPress(BTN.CROSS, () => { if (tab() !== 0) setTab(0); });
   onButtonPress(BTN.UP, () => { if (tab() === 0) setSelected((selected() + 5) % 6); });
   onButtonPress(BTN.DOWN, () => { if (tab() === 0) setSelected((selected() + 1) % 6); });

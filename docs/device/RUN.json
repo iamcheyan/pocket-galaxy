@@ -1,0 +1,18 @@
+{
+  "app": "galaxy",
+  "package_sha256": "e885b976fa0fc6fa189146fed90162336564d5631d2adcac007c18b4806a5e6c",
+  "launcher_before": "1506",
+  "launcher_after": "25379",
+  "boot_sha256": "6ed41612bce1723d1eda64b5a0ee9333a105ed498b7085c03267539cf6c1b32d",
+  "frames": [
+    "home",
+    "selected",
+    "action",
+    "shipyard",
+    "logbook",
+    "settings",
+    "settings-toggled"
+  ],
+  "runtime": "/mnt/sdcard/System/pocketjs/bin/pocket-linux-kms",
+  "deploy": "/storage/pjs/pocket-galaxy"
+}
